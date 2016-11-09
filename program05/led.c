@@ -1,5 +1,5 @@
 #include <avr/io.h>
-#define USART_BAUDRATE 9600
+#define USART_BAUDRATE 115200
 #define UBRR_VALUE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1)
 void USART0Init(void)
 {
@@ -35,10 +35,10 @@ int main (void)
     {
         // Receive data
         u8TempData = USART0ReceiveByte();
-        if (u8TempData==45) {
+        if (u8TempData==65 || u8TempData==41 || u8TempData==101 || u8TempData=='A') {
             PORTB |= _BV(PORTB5);
         }
-        if (u8TempData==41) {
+        if (u8TempData==66 || u8TempData==42 || u8TempData==102 || u8TempData=='B') {
             PORTB &= ~_BV(PORTB5);
         }
         // Increment received data

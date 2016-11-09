@@ -25,12 +25,13 @@ compile with the command: gcc demo_tx.c rs232.c -Wall -Wextra -o2 -o test_tx
 
 int main()
 {
-  int i=0,
-      cport_nr=0,        /* /dev/ttyS0 (COM1 on windows) */
-      bdrate=9600;       /* 9600 baud */
+  int i=0,/*n,*/
+      cport_nr=24,        /* /dev/ttyS0 (c on windows) */
+      bdrate=115200;       /* 9600 baud */
 
   char mode[]={'8','N','1',0},
        str[2][512];
+  //unsigned char buf[4096];
 
 
   strcpy(str[0], "The quick brown fox jumped over the lazy grey dog.\n");
@@ -48,19 +49,35 @@ int main()
   while(1)
   {
     if (i%2==0) {
-        RS232_cputs(cport_nr, "E");
-	printf("sent: %s\n", "E");
-    } else {
         RS232_cputs(cport_nr, "A");
-        printf("sent: %s\n", "A");
+	printf("sent: %s\n", "A");
+    } else {
+        RS232_cputs(cport_nr, "B");
+        printf("sent: %s\n", "B");
     }
+    
+    /*n = RS232_PollComport(cport_nr, buf, 4095);
 
-#ifdef _WIN32
-    Sleep(4000);
-#else
+    if(n > 0)
+    {
+      buf[n] = 0;
+
+      for(i=0; i < n; i++)
+      {
+        if(buf[i] < 32) 
+        {
+          buf[i] = '.';
+        }
+      }
+
+      printf("received %i bytes: %s\n", n, (char *)buf);
+    }*/
+
+    #ifdef _WIN32
+    Sleep(10000);
+    #else
     usleep(4000000);  /* sleep for 1 Second */
-#endif
-
+    #endif
     i++;
 
     i %= 2;
