@@ -7,11 +7,10 @@
 int main(int argc, char **argv)
 {
     struct sockaddr_rc addr = { 0 };
+    char buffer[1];
     int s, status;
-    char dest[18] = "98:D3:31:30:71:08";
-    char writeData[50];
-    
-    strcpy(writeData, argv[0]);
+    char dest[18] = "20:15:05:19:58:58";
+    int opt=0;
     // allocate a socket
     s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
 
@@ -25,7 +24,13 @@ int main(int argc, char **argv)
 
     // send a message
     if( status == 0 ) {
-        status = write(s, writeData, strlen(writeData));
+	printf("ROVER: \n 1:atras\n2:avanzar\n3:izquierda\n4:derecha\n5:parar\n");
+	while(1){
+		scanf("%d",&opt);
+		snprintf(buffer, 10, "%d", opt);
+        	status = write(s, buffer, 1);
+		usleep(1000);
+	}
     }
 
     if( status < 0 ) perror("uh oh");

@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 {
     struct sockaddr_rc addr = { 0 };
     int s, status;
-    char dest[18] = "98:D3:31:30:71:08";
+    char dest[18] = "20:15:05:19:58:58";
     char writeData[50];
     
     strcpy(writeData, argv[0]);

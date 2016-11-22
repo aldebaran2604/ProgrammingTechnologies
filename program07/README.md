@@ -1,1 +1,1 @@
-Programa para el envio de datos
+Escaneo y conexión bluetooth con c
