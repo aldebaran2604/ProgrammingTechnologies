@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 {
     struct sockaddr_rc addr = { 0 };
     int s, status;
-    char dest[18] = "01:23:45:67:89:AB";
+    char dest[18] = "18:89:5B:AF:28:B7";
 
     // allocate a socket
     s = socket(AF_BLUETOOTH, SOCK_STREAM, BTPROTO_RFCOMM);
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
     // send a message
     if( status == 0 ) {
-        status = write(s, "hello!", 6);
+        status = write(s, "A", 6);
     }
 
     if( status < 0 ) perror("uh oh");

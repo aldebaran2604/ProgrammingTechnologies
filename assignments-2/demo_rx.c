@@ -43,6 +43,15 @@ int main()
 
   while(1)
   {
+
+    RS232_cputs(cport_nr, "1");
+
+    #ifdef _WIN32
+        Sleep(100);
+    #else
+        usleep(100000);  /* sleep for 100 milliSeconds */
+    #endif
+        
     n = RS232_PollComport(cport_nr, buf, 4095);
 
     if(n > 0)
@@ -59,12 +68,6 @@ int main()
 
       printf("received %i bytes: %s\n", n, (char *)buf);
     }
-
-    #ifdef _WIN32
-        Sleep(100);
-    #else
-        usleep(100000);  /* sleep for 100 milliSeconds */
-    #endif
   }
 
   return(0);

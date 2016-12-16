@@ -1,0 +1,1 @@
+(batch "/home/aldebaran/ProgrammingTechnologies/assignments-8/diagnostico.clp")

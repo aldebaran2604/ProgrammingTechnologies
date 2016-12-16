@@ -1,0 +1,4299 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<doc name="functions">
+
+  <chapter heading="The Jess Function List" stylesheet="stylesheet.css" >
+
+    In this chapter, every Jess language function shipped with Jess version
+    7 is described. Previous versions of Jess had a notion of
+    "optional functions," but Jess 7 does not: all of the functions
+    described here are always available.
+    <p/>
+    You may also like to look at a list of functions <link
+    href="function_index.html">grouped by category</link> or <link href="function_alpha.html">sorted by name.</link>
+      <blockquote>
+      <i>Note:</i> many functions documented as requiring a specific
+      minimum number of arguments will actually return sensible
+      results with fewer; for example, the <jessf name="+"/>
+      function will return the value of a single argument as its
+      result. This behavior is to be regarded as undocumented and
+      unsupported. In addition, all functions documented as requiring
+      a specific number of arguments will not report an error if
+      invoked with more than that number; extra arguments are simply
+      ignored.
+    </blockquote>
+
+    <functionlist>
+        <!-- *********************************************************** -->
+
+        <functiondef topic="control" name="continue" heading="(continue)">
+            <arguments>None</arguments>
+
+            <returns>N/A</returns>
+
+            <description>
+                Immediately jump to the end of any enclosing loop and begin the next iteration of the loop. For "while" loops, the loop test will be executed next; for "for" loops, the increment function will be executed. Can be used inside of <jessf name="for"/>, <jessf name="while"/>,
+                and <jessf name="foreach"/> loops. If called anywhere else, will throw an exception.
+            </description>
+        </functiondef>
+
+
+        <functiondef topic="control" name="break" heading="(break)">
+            <arguments>None</arguments>
+
+            <returns>N/A</returns>
+
+            <description>
+                Immediately exit any enclosing loop or control scope. Can be used inside of <jessf name="for"/>, <jessf name="while"/>,
+                and <jessf name="foreach"/> loops, as well as within the body of a <construct name="deffunction"></construct> or
+                the right hand side of a <construct name="defrule"/>. If called anywhere else, will throw an exception.
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="lists" name="as-list" heading="(as-list &lt;java-object>)">
+            <arguments>
+          A Java object (must be an array)</arguments>
+
+            <returns>
+          A list</returns>
+
+            <description>
+          Converts the given Java array into a Jess list. This happens automatically for arrays
+          returned by functions declared to return an array, but you can easily fetch an array from
+          a Java method that returns Object, and in this case this function is useful.
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="misc" name="help" heading="(help &lt;function-name>)">
+            <arguments>
+          A function name</arguments>
+
+            <returns>
+          nil</returns>
+
+            <description>
+          Prints a description of the named function to WSTDOUT.
+            </description>
+        </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="**" heading="(** &lt;numeric-expression> &lt;numeric-expression>)">
+
+        <arguments>
+          Two numeric expressions</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Raises its first argument to the power of its second
+          argument (using Java's <tt>Math.pow()</tt>
+          function). <b><i>Note</i>:</b> the return value may be
+          <tt>NaN</tt> (not a number); see the Java API documentation for details. 
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="+" heading="(+ &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the sum of its arguments. The return value is an
+          <tt>INTEGER</tt> or <tt>LONG</tt> unless any of the
+          arguments are <tt>FLOAT</tt>, in which case it is a
+          <tt>FLOAT</tt>.
+        </description>
+      </functiondef>
+
+      <!-- ***********************************************************
+      -->
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="++" heading="(++ &lt;variable&gt;)">
+
+        <arguments>
+          A variable</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Adds one to the variable (which should contain a numeric
+          value,) sets the variable to the new value, and returns the
+          new value. Throws an exception if the argument is not a
+          variable containing a numeric type. The type of the variable
+          is preserved.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="--" heading="(-- &lt;variable&gt;)">
+
+        <arguments>
+          A variable</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Subtracts one from the variable (which should contain a numeric
+          value,) sets the variable to the new value, and returns the
+          new value. Throws an exception if the argument is not a
+          variable containing a numeric type. The type of the variable
+          is preserved.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="-" heading="(- &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the first argument minus all subsequent
+          arguments. The return value is an <tt>INTEGER</tt> or
+          <tt>LONG</tt> unless any of the arguments are
+          <tt>FLOAT</tt>, in which case it is a <tt>FLOAT</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="/" heading="(/ &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the first argument divided by all subsequent
+          arguments. The return value is a <tt>FLOAT</tt>.
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="&lt;" heading="(&lt; &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions or <tt>Comparable</tt> objects</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if each argument is less than the
+          argument following it; otherwise, returns
+          <tt>FALSE</tt>. The definition of "less than" varies
+          depending on the types being compared.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="&lt;=" heading="(&lt;= &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions or <tt>Comparable</tt> objects</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if the value of each argument is less
+          than or equal to the value of the argument following it;
+          otherwise, returns <tt>FALSE</tt>. The definition of "less
+          than or equal to" depends on the objects being compared.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="&lt;&gt;" heading="(&lt;&gt; &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions or <tt>Comparable</tt> objects</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if the value of the first argument is
+          not equal in value to all subsequent arguments; otherwise
+          returns <tt>FALSE</tt>. The definition of "not equal"
+          depends on the objects being compared.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="=" heading="(= &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions or <tt>Comparable</tt> objects</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if the value of the first argument is
+          equal in value to all subsequent arguments; otherwise,
+          returns <tt>FALSE</tt>. The integer 2 and the float 2.0 are
+          <jessf name="="/>, but not <jessf name="eq"/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="&gt;" heading="(> &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions or <tt>Comparable</tt> objects</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if the value of each argument is
+          greater than that of the argument following it; otherwise,
+          returns <tt>FALSE</tt>. The definition of "greater than"
+          depends on the objects being compared
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="&gt;=" heading="(>= &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions or <tt>Comparable</tt> objects</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if the value of each argument is
+          greater than or equal to that of the argument following it;
+          otherwise, returns <tt>FALSE</tt>. The definition of
+          "greater than or equal to" depends on the objects being
+          compared.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="abs" heading="(abs &lt;numeric-expression>)">
+
+        <arguments>
+          One numeric expression</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the absolute value of its only argument.
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="agenda" heading="(agenda [&lt;module-name&gt; | *])">
+
+        <arguments>
+          Optionally, a module name or the symbol "*"</arguments>
+
+        <returns>
+          NIL</returns>
+
+        <description>
+          Displays a list of rule activations to the WSTDOUT
+          router. If no argument is specified, the activations in the
+          current module (not the focus module) are displayed. If a
+          module name is specified, only the activations in that
+          module are displayed. If "*" is specified, then all
+          activations are displayed.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="logic" name="and" heading="(and &lt;expression>+)">
+
+        <arguments>
+          One or more expressions</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if all arguments evaluate to a
+          non-<tt>FALSE</tt> value; otherwise, returns
+          <tt>FALSE</tt>.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="control" name="apply" heading="(apply &lt;expression>+)">
+
+        <arguments>
+          A function name or lambda followed by zero or more expressions</arguments>
+
+        <returns>
+          An expression</returns>
+
+        <description>
+          Returns the result of calling the first argument, either the name of a Jess
+          function or a lambda expression, on all the remaining arguments. The strength of
+          this method lies in the fact that you can call a function
+          whose name, for instance, is in a Jess variable.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="assert" heading="(assert &lt;fact>+)">
+
+        <arguments>
+          One or more facts</arguments>
+
+        <returns>
+          A Fact, or FALSE</returns>
+
+        <description>
+          <p>Adds all the facts to the working memory; returns the last
+          fact asserted or <tt>FALSE</tt> if no facts were
+          successfully asserted (for example, if all facts given are
+          duplicates of existing facts.) A <apic
+          class="jess.JessEvent"/> of type <tt>JessEvent.FACT</tt>
+          will be sent if the event mask is set
+          appropriately.</p>
+          <p>It is important to remember that all pattern-matching
+          happens during calls to <jessf name="assert"/>, <jessf
+          name="retract"/>, <jessf name="modify"/>, and related
+          functions. Pattern-matching happens whether the engine is
+          running or not.</p>
+          <p>Example:</p>
+          <jess>
+<input>(reset)</input>
+<result>TRUE</result>
+<input>(assert (testing 1 2 3))</input>
+<result>&lt;Fact-1&gt;</result>
+          </jess>
+
+</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="assert-string" heading="(assert-string &lt;string-expression>)">
+
+        <arguments>
+          One string representing a fact</arguments>
+
+        <returns>
+          A Fact, or FALSE</returns>
+
+        <description>
+          <p>Converts a string into a fact and asserts it. Attempts to
+          parse string as a fact, and if successful, returns the value
+          returned by assert with the same fact. Note that the string
+          must contain the fact's enclosing parentheses.</p>
+          <p>Example:</p>
+          <jess>
+<input>(reset)</input>
+<result>TRUE</result>
+<input>(assert-string "(testing 1 2 3)")</input>
+<result>&lt;Fact-1&gt;</result>
+          </jess>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="bag" heading="(bag &lt;bag-command> &lt;bag-arguments>+)">
+
+        <arguments>
+          A symbol (a sub-command) and one or more additional arguments</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          The <jessf name="bag"/> command lets you
+          manipulate Java hashtables from Jess.  The net result is
+          that you can create any number of associative arrays or
+          property lists. Each such array or list has a name by which
+          it can be looked up. The lists can contain other lists as
+          properties, or any other Jess data type.
+
+          <p/>The <jessf name="bag"/> command does different
+          things based on its first argument.  It's really seven
+          commands in one:
+
+          <ul>
+            <li>
+              <tt>create</tt> accepts a String, the name of a new Bag
+              to be created.  The bag object itself is returned. For
+              example:
+
+              <jess>
+                <input>(bag create my-bag)</input>
+              </jess></li>
+
+            <li>
+              <tt>delete</tt> accepts the name of an existing bag, and
+              deletes it from the list of bags.</li>
+
+            <li>
+              <tt>find</tt> accepts the name of a bag, and returns the
+              corresponding bag object, if one exists, or
+              <tt>nil.</tt></li>
+
+            <li>
+              <tt>list</tt> returns a list of the names of all the
+              existing bags.</li>
+
+            <li>
+              <tt>set</tt> accepts as arguments a bag, a String
+              property name, and any Jess value as its three
+              arguments. The named property of the given bag is set to
+              the value, and the value is returned.</li>
+
+            <li>
+              <tt>get</tt> accepts as arguments a bag and a String
+              property name. The named property is retrieved and
+              returned, or <tt>nil</tt> if there is no such
+              property. For example:
+
+<jess>
+<input>(defglobal ?*bag* = 0)</input>
+<result>TRUE</result>
+<input>(bind ?*bag* (bag create my-bag))</input>
+<result>&lt;Java-Object:java.util.Hashtable></result>
+<input>(bag set ?*bag* my-prop 3.0)</input>
+<result>3.0</result>
+<input>(bag get ?*bag* my-prop)</input>
+<result>3.0</result>
+</jess></li>
+
+            <li>
+              <tt>props</tt> accepts a bag as the single argument and
+              returns a list of the names
+              of all the properties of that bag.</li>
+          </ul>
+        </description>
+      </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="engine" name="batch" heading="(batch &lt;filename&gt; [&lt;charset&gt;])">
+
+            <arguments>
+                One string representing the name of a file,
+                and optionally a character set name</arguments>
+
+            <returns>
+                (Varies)</returns>
+
+            <description>
+                <p>Attempts to parse and evaluate the given file as Jess
+                code. If successful, returns the return value of the
+                last expression in the file.  <p/> <b><i>Note:</i></b>
+                the argument must follow Jess' rules for valid
+                strings. On UNIX systems, this presents no particular
+                problems, but Win32 filenames may need special
+                treatment. In particular: pathnames should use either
+                '\\' (double backslash) or '/' (forward slash) instead
+                of '\' (single backslash) as directory separators.
+                <p/> In an applet, batch will try to find the
+                file relative to the applet's document base. In any
+                program, if the file is not found, the name is then
+                passed to
+                <tt>ClassLoader.getSystemResourceAsStream()</tt>. This
+                allows files along the class path, including files in
+                JARs, to be batched.</p>
+                <p>If you specify a character set name as the optional
+                second argument, Jess will assume the file is written
+                using that character set.</p>
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="engine" name="require" heading="(require
+                     &lt;symbol&gt; [&lt;filename&gt;])">
+
+            <arguments>
+                A symbol, and optionally a filename</arguments>
+
+            <returns>
+                Returns the symbol, or throws an exception on failure.
+            </returns>
+
+            <description>
+                <p>
+                "Require" is similar to <jessf
+                name="batch"/>. The main difference is that
+                it will only load a file once. If a file has been read
+                before, this function won't read it a second time,
+                whereas <jessf name="batch"/> would.
+                </p>
+                <p>
+                The symbol argument is a "feature name". A file can
+                "provide a feature" (see the <jessf
+                name="provide"/> function.) Once a
+                feature has been provided, subsequent calls to
+                <tt>require</tt> for this same feature name will be
+                ignored.
+                </p>
+                <p>
+                If the optional filename is supplied, Jess passes that
+                name to <jessf name="batch"/> to attempt
+                to read the file, if necessary. If the optional
+                filename is not provided, Jess appends ".clp" to the
+                feature name and uses that as the argument to <jessf
+                name="batch"/>. If the feature is not
+                provided by the first file that is read, an exception is
+                thrown to announce this failure.
+                </p>
+                <p>
+                The most important use of "require" is to establish
+                dependencies between files in the JessDE editor.
+                </p>
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="engine" name="require*" heading="(require*
+                     &lt;symbol&gt; [&lt;filename&gt;])">
+
+            <arguments>
+                A symbol, and optionally a filename</arguments>
+
+            <returns>
+                Returns the symbol, or nil on failure.
+            </returns>
+
+            <description>
+                <p>
+                  This function is just like <jessf
+                  name="require"/>, except that it fails
+                  silently if the file is missing or if there is an
+                  error while parsing the required file. If the
+                  feature is provided, the feature name is returned;
+                  otherwise, <tt>nil</tt> is returned instead.
+                </p>
+            </description>
+        </functiondef>
+
+        <functiondef topic="engine" name="provide" heading="(provide &lt;symbol&gt;)">
+
+            <arguments>
+                A symbol</arguments>
+
+            <returns>
+                Returns the symbol.
+            </returns>
+
+            <description>
+                <p>
+                 Provides a feature to Jess. The symbol is entered in
+                 the feature table. See <jessf name="require"/>.
+                </p>
+                <p>
+                 If the feature is meant to be loaded from a
+                 subdirectory of the current directory or a
+                 subdirectory of a class path root, then the feature
+                 name must reflect that. For example if a feature X is
+                 implemented in the file <tt>com/company/X.clp</tt>,
+                 then the feature name must be "com/company/X". This
+                 full feature name must be used by <jessf
+                 name="require"/> to load the feature or the feature
+                 may not be found.
+                </p>
+            </description>
+        </functiondef>
+
+
+      <functiondef topic="misc" name="bind" heading="(bind &lt;variable> &lt;expression>)">
+
+        <arguments>
+          A variable name and any value</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          <p>Binds a variable to a new value. Assigns the given value to
+          the given variable, creating the variable if
+          necessary. Returns the given value.</p>
+          <p>Example:</p>
+          <jess>
+<input>(bind ?x 3)</input>
+<result>3</result>
+<input>?x</input>
+<result>3</result>
+          </jess>
+            <p>If the variable name contains a period, like <tt>?x.y</tt>, then this function
+                will attempt to modify slot y of a fact in variable ?x to the given value.</p>
+
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="logic" name="bit-and" heading="(bit-and &lt;integer-expression>+)">
+
+        <arguments>
+          One or more integer expressions</arguments>
+
+        <returns>
+          int</returns>
+
+        <description>
+          Performs the bitwise AND of the arguments. <tt>(bit-and 7
+          4)</tt> is 4, and is equivalent to the Java <tt>7 &amp;
+          4</tt>.</description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="logic" name="bit-not" heading="(bit-not &lt;integer-expression>)">
+
+        <arguments>
+          One integer expression</arguments>
+
+        <returns>
+          int</returns>
+
+        <description>
+          Performs the bitwise NOT of the argument. <tt>(bit-not
+          0)</tt> is -1, and is equivalent to the Java
+          <tt>~0</tt>.</description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="logic" name="bit-or" heading="(bit-or &lt;integer-expression>+)">
+
+        <arguments>
+          One or more integer expressions</arguments>
+
+        <returns>
+          int</returns>
+
+        <description>
+          Performs the bitwise OR of the arguments. <tt>(bit-or 2
+          4)</tt> is 6, and is equivalent to the Java <tt>2 |
+          4</tt>.</description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="bload" heading="(bload &lt;filename&gt;)">
+
+        <arguments>
+          One string representing the name of a file</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          <p>The argument is the path to a file previously produced by
+          the <jessf name="bsave"/> command. The file is
+          decompressed and deserialized to restore the state of the
+          current Rete object. I/O routers are not restored from the
+          file; they retain their previous state. Furthermore,
+          JessListeners are not restored from the file; again, they
+          are retained from their state prior to the bload.</p>
+	  <p>To decode the dump file, this function decompresses the
+	  data using <javac class="java.util.zip.GZIPInputStream"/>
+	  and sends the result to the <apif class="jess.Rete"
+	  method="bload(java.io.InputStream)"/> method. Therefore,
+	  this function cannot be directly read data saved by
+	  <apif class="jess.Rete"
+	  method="bsave(java.io.OutputStream)"/> method because the decompression step will fail.</p>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="bsave" heading="(bsave &lt;filename&gt;)">
+
+        <arguments>
+          One string representing the name of a file</arguments>
+
+        <returns>
+          TRUE
+        </returns>
+
+        <description>
+          <p>Dumps the engine in which it is called to the given filename
+          argument in a format that can be read using <jessf
+          name="bload"/>. Any input/output streams and
+          event listeners are not saved during the serialization
+          process.</p>
+	  <p>To produce the dump file, this function calls the
+	  <apif class="jess.Rete"
+	  method="bsave(java.io.OutputStream)"/> method and compresses
+	  the data using
+	  <javac class="java.util.zip.GZIPOutputStream"/>. Therefore,
+	  data saved by this method cannot be directly read by the
+	  <apif class="jess.Rete"
+	  method="bload(java.io.InputStream)"/> method without first
+	  decompressing it.</p>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="build" heading="(build &lt;string-expression>)">
+
+        <arguments>
+          One string representing some Jess code</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          Evaluates a string as though it were entered at the command
+          prompt. Only allows constructs to be evaluated. Attempts to
+          parse and evaluate the given string as Jess code. If
+          successful, returns the return value of the last expression
+          in the string. This is typically used to define rules from
+          Jess code. For instance:
+
+
+          <p/><tt>(build "(defrule foo (foo) => (bar))")</tt>
+
+          <p/> Note: The string must consist of one single construct;
+          multiple constructs can be built using multiple calls to
+          <tt>build.</tt>
+        </description>
+      </functiondef>
+      <!-- ************************************************** -->
+      <functiondef topic="java" name="call" heading="([call] &lt;java
+object> | &lt;class-name> &lt;method-name&gt; &lt;argument&gt;*)" >
+
+        <arguments>
+          A java object or class name, optionally a method or field name, and any number of
+          additional arguments</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          Calls a Java method on the given object, a static method
+          of the class named by the first argument, invokes a lambda,
+          or returns the value of a Java field in the object.
+          Unless the first argument is a lambda, the second
+          argument is the name of the method or field. All subsequent arguments, if any,
+          are passed to the lambda or method. When calling Java methods,
+          arguments are promoted and
+          overloaded methods selected precisely as for <jessf
+          name="new"/>.  The return value is converted to a
+          suitable Jess value before being returned.  Array return
+          values are converted to lists.
+
+          <p/>The functor <jessf name="call"/> may be
+          omitted unless the method being called is a Java static method. The
+          following two method calls are equivalent:
+<jess>
+<input>(bind ?list (new java.util.ArrayList))</input>
+<input>;; These are legal and equivalent
+(call ?list add "Foo")
+(?list add "Foo")
+</input>
+</jess>
+
+          <p>Note that <jessf name="call"/> can even be omitted
+          if the object comes from the return value of another
+          function call:</p>
+<jess>
+<input>;; This is legal
+((new java.util.ArrayList 10) add "Foo")
+</input>
+</jess>
+
+<p>If the first argument is a Java object, and the second a symbol, and there
+are no other arguments, and the object does not have a no-argument method by the
+given name, then Jess will attempt to return the value of a field by that name
+        in the object, if one exists. As with method calls, the "call" functor can be omitted. So,
+        for example, </p>
+<jess>
+<input>(bind ?dim (new java.awt.Dimension 10 20))</input>
+<input>;; These are legal and equivalent
+(get-member ?dim width)
+(?dim width)
+</input>
+</jess>
+        </description>
+      </functiondef>
+
+      <!-- ************************************************** -->
+
+      <functiondef topic="control" name="call-on-engine"
+heading="(call-on-engine &lt;Java object>  &lt;jess-code>)">
+
+        <arguments>
+          an <apic class="jess.Rete"/> object, and an executable
+          snippet of Jess code</arguments>
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          Executes some Jess code in the context of the given Rete
+          object. This is a nice way to send messages between multiple
+          Rete engines in one process. Note that the current variable
+          context is used to evaluate the code, so (for instance) all
+          defglobal values will be from the calling engine, not the
+          target.
+
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="clear" heading="(clear)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Clears Jess. Deletes all rules, deffacts, defglobals,
+          templates, facts, activations, and so forth. Java
+          Userfunctions are not deleted.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="clear-storage" heading="(clear-storage)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Clears the hashtable used by <jessf
+          name="store"/> and <jessf
+          name="fetch"/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="files" name="close" heading="(close &lt;router-identifier>*)">
+
+        <arguments>
+          One or more router identifiers (symbols)</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Closes any I/O routers associated with the given name by
+          calling <tt>close()</tt> on the underlying stream, then
+          removes the routers. Any I/O errors are ignored. Any subsequent attempt to use a closed
+          router will report <tt>bad router</tt>. See <link
+          href="#open">open</link>.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="complement$" heading="(complement$ &lt;list-expression> &lt;list-expression>)">
+
+        <arguments>
+          Two lists</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Returns a new list consisting of all elements of the
+          second list not appearing in the first
+          list.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name= "context" heading="(context)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          A <apic class="jess.Context"/> object</returns>
+
+        <description>
+          Returns the execution context (a <apic
+          class="jess.Context"/> object) it is called in. This
+          provides a way for deffunctions to get a handle to this
+          useful class.
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+      <functiondef topic="queries" name="count-query-results" heading="(count-query-results &lt;query-name> &lt;expression>*)">
+
+        <arguments>
+          A query name, and zero or more additional expressions</arguments>
+
+        <returns>
+          INTEGER</returns>
+
+        <description>
+          Runs a <link href="queries.html">query</link> and
+          returns a count of the matches. See the documentation for
+          <link href="queries.html">defquery</link> for more
+          details. Also see <link href="#run-query">run-query</link>
+          for caveats concerning calling count-query-results on a rule
+          RHS.
+        </description>
+      </functiondef>
+
+
+      <!-- ************************************************** -->
+
+      <functiondef topic="lists" name="create$" heading="(create$ &lt;expression>*)">
+
+        <arguments>
+          Zero or more expressions</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Creates and returns a new list containing all the given
+          arguments, in order. For each argument that is a list,
+          the individual elements of the list are added to the
+          new list; this function will not create nested
+          lists (which are not meaningful in the Jess language.)
+          <b><i>Note</i></b>: lists must be created explicitly
+          using this function or others that return them. Lists
+          cannot be directly parsed from Jess input.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="defadvice" heading="(defadvice
+                   (before | after) (&lt;function-name> | &lt;list> |
+                   ALL )
+                   &lt;function-call>+)">
+
+        <arguments>
+          The symbol <tt>before</tt> or the symbol <tt>after</tt>,
+          followed by either one function name or a list of
+          function names or the symbol <tt>ALL</tt>, followed by one or
+          more function calls.</arguments>
+
+          <returns>
+            (varies)</returns>
+          <description>
+            Lets you supply extra code to run before or after the
+            named function(s) or all functions. If <tt>before</tt> is
+            specified, the code will execute before the named
+            function(s); the variable $?argv will hold the entire
+            function call vector (function name and parameters) on
+            entry to and exit from the code block. If <tt>after</tt>
+            is specified, the function will be called before the code
+            block is entered. When the block is entered, the variable
+            ?retval will refer to the original function's return
+            value.  <p/> Whether <tt>before</tt> or <tt>after</tt> is
+            specified, if the code block explicitly calls <jessf
+            name="return"/> with a value, the returned
+            value will appear to the caller to be the return value of
+            the original function. For <tt>before</tt> advice, this
+            means the original function will not be called in this
+            case.
+          </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="defclass" heading="(defclass &lt;template-name>
+                   &lt;Java class name> [extends &lt;template-name>])">
+
+      <arguments>
+          Two or four symbols, as noted above</arguments>
+
+        <returns>
+          The second argument</returns>
+
+        <description>
+          <p>Defines a template with the given name, with slots based
+          on the Java Beans properties found in the named class. If
+          the optional extends clause is included, the second named
+          template will become the parent of the new template. The
+          common slots in the two templates will be in the same order,
+          at the beginning of the new template. Rules defined to match
+          instances of the parent template will also match instances
+          of the new child template.</p>
+          <p>
+          Note that anything you can do using the defclass function,
+          you can also do with the <construct name="deftemplate"/>
+          construct -- but deftemplate lets you do even more.
+          </p>
+        </description>
+      </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="java" name="definstance" heading="(definstance &lt;template-name> &lt;Java object> [static | dynamic | auto] )">
+
+            <arguments>
+                A symbol, a Java object, and (optionally) one of the symbols
+                <tt>static</tt>, <tt>dynamic</tt>, or <tt>auto</tt></arguments>
+
+            <returns>
+                The new shadow fact</returns>
+
+            <description>
+                <p>Creates a "shadow fact" representing the given Java
+                object, according to the named template. By default,
+                or if the "dynamic" qualifier is specified, and if the
+                object accepts <javac
+                class="java.beans.PropertyChangeListener"/>s, then
+                Jess will install a listener in the given object, so
+                that Jess can keep the shadow fact updated if the
+                object's properties change. If the object doesn't
+                accept <tt>PropertyChangeListener</tt>s, or if the
+                "static" qualifier is specified, then no listener will
+                be registered and the shadow fact will not be upated
+                when the object changes. The "auto" qualifier is
+                equivalent to the default behavior.
+                </p>
+
+                <p>Note that it is an error for a given Java object to
+                be added to working memory more than once. The second
+                and subsequent <jessf name="definstance"/> calls for a
+                given object will return a fact-id with value -1.</p>
+
+                <p>This function is a generalized form of <jessf name="add"/>.</p>
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="java" name="add" heading="(add &lt;Java object&gt;)">
+
+            <arguments>
+                A Java object</arguments>
+
+            <returns>
+                nil</returns>
+
+            <description>
+                Adds the given object to working memory. Creates a "shadow fact"
+                representing the given Java object, using the template whose name is
+                the same as the given object's class, without the package prefix. If
+                this template doesn't exist, it is created. Equivalent to calling
+<shell>
+(definstance &lt;classname&gt; &lt;Java object&gt; auto)
+</shell>
+                See the description of the <jessf name="definstance"/> function for
+                more information.
+            </description>
+        </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="update" heading="(update &lt;java-object&gt;+)">
+
+        <arguments>
+          One or more Java objects, previously passed as arguments to
+            <jessf name="add"/> or <jessf name="definstance"/>.
+        </arguments>
+
+        <returns>
+          The shadow fact tied to the last argument.</returns>
+
+        <description>
+            Java objects in working memory aren't necessarily updated
+            automatically, since Jess may not know when an object
+            object has been changed. This function lets you tell Jess
+            explicitly that one or more Java objects have been
+            updated. In response, Jess will find their corresponding
+            shadow facts and update all their slots.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="delete$" heading="(delete$ &lt;list-expression> &lt;begin-integer-expression> &lt;end-integer-expression>)">
+
+        <arguments>
+          A list and two integer expressions</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Returns a new list like the original list but
+          with the elements in the specified range removed. The first
+          numeric expression is the 1-based index of the first element
+          to remove; the second is the 1-based index of the last
+          element to remove. It is an error to use any index value less than
+            1 or greater than the list length, or an end index less than
+            the begin index. </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="div" heading="(div &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the first argument divided by all subsequent
+          arguments using integer division. The return value is an <tt>INTEGER.</tt>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="do-backward-chaining" heading="(do-backward-chaining &lt;template-name>)">
+
+        <arguments>
+          Name of a template (ordered or unordered)</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Marks a template as being eligible for backwards chaining,
+          as described in the text. If the template is unordered --
+          i.e., if it is explicitly defined with a (deftemplate)
+          construct -- then it must be defined <i>before</i> calling
+          <tt>do-backward-chaining</tt>. In addition, this function
+          must be called <i>before</i> defining any rules which use
+          the template.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="e" heading="(e)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the transcendental number <i>e</i>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="engine" heading="(engine)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          A <apic class="jess.Rete"/> object</returns>
+
+        <description>
+          Returns the <apic class="jess.Rete"/> object in which the
+          function is called.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="eq" heading="(eq &lt;expression> &lt;expression>+)">
+
+        <arguments>
+          Two or more arbitrary arguments</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          <p>
+          Returns <tt>TRUE</tt> if the first argument is equal in type
+          and value to all subsequent arguments. For strings, this
+          means identical contents.  Uses the Java
+          <tt>Object.equals()</tt> function, so can be redefined. Note
+          that the integer <tt>2</tt> and the
+          floating-point number <tt>2.0</tt> are <i>not</i> <jessf
+          name="eq"/>, but they are <jessf
+          name="eq*"/> and <jessf name="="/>.
+          </p>
+          <p>
+          While often used in procedural code, this function is only
+          rarely used during pattern matching. Direct matching is
+          preferable.
+          </p>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="eq*" heading="(eq* &lt;expression> &lt;expression>+)">
+
+        <arguments>
+          Two or more arbitrary arguments</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if the first argument is equivalent to
+          all the others.  Uses numeric equality for numeric types,
+          unlike <tt>eq</tt>. Note that the integer 2 and the
+          floating-point number 2.0 are <i>not</i> <jessf
+          name="eq"/>, but they are <jessf
+          name="eq*"/> and <jessf name="="/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="eval" heading="(eval &lt;lexeme-expression>)">
+
+        <arguments>
+          One string containing a valid Jess expression</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          Evaluates a string as though it were entered at a command
+          prompt. Only allows functions to be evaluated. Evaluates the
+          string as if entered at the command line and returns the
+          result.  <p/> Note: The string must consist of one
+          single function call; multiple calls can be evaluated using
+          multiple calls to eval.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="evenp" heading="(evenp &lt;expression>)">
+
+        <arguments>
+          One numeric expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> for even numbers; otherwise, returns
+          <tt>FALSE</tt>.  Results with non-integers may be
+          unpredictable.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="exit" heading="(exit)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Nothing</returns>
+
+        <description>
+          Exits Jess and halts Java.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="exp" heading="(exp &lt;numeric-expression>)">
+
+        <arguments>
+          One numeric expression</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Raises the value <i>e</i> to the power of its only argument.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="explode$" heading="(explode$ &lt;string-expression>)">
+
+        <arguments>
+          One string</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Creates a list value from a string. Parses the string
+          as if by a succession of <jessf name="read"/>
+          calls, then returns these individual values as the elements
+          of a list.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="external-addressp" heading="(external-addressp &lt;expression&gt;)">
+
+        <arguments>
+          One expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          <b>Deprecated.</b> Use <jessf name="java-objectp"/> instead.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="java-objectp" heading="(java-objectp &lt;expression&gt;)">
+
+        <arguments>
+          One expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if the expression evaluates to a Java object.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="fact-id" heading="(fact-id &lt;integer>)">
+
+        <arguments>
+          One number, a fact-id</arguments>
+
+        <returns>
+          The given number as a <apic class="jess.Fact"/></returns>
+
+        <description>
+          If the argument is the fact-id of an existing fact, returns
+          that <apic class="jess.Fact"/> object; otherwise throws an
+          exception. The lookup done by this function is
+          <i>slow</i>. Be sure you really need to call this
+          function. If you have a value that prints as
+          "&lt;Fact-1&gt;", then it's already a Fact object.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="fact-slot-value" heading="(fact-slot-value &lt;fact-id> &lt;slot-name>)">
+
+        <arguments>
+          A <apic class="jess.Fact"/> and a slot name</arguments>
+
+        <returns>
+          (varies)</returns>
+
+        <description>
+          Returns the value in the named slot of the fact. You should
+          <i>never</i> need to call this on the left hand side of a
+          rule; direct matching is always better. You should only
+          occasionally need it in other code; again, directly matching
+          the slots on the left hand side of a rule is better.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="facts" heading="(facts [&lt;module name&gt; | *])">
+
+        <arguments>
+          Module name or * (optional)</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Prints a list of all facts in working memory from the current module. If a module name
+          is provided as an argument, facts from that module are listed instead. If the argument "*"
+          is given, all facts from all modules are listed.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="fetch" heading="(fetch &lt;string or symbol&gt;)">
+
+        <arguments>
+          One string or symbol</arguments>
+
+        <returns>
+          (varies)</returns>
+
+        <description>
+          Retrieves and returns any value previously stored by the
+          <jessf name="store"/> function under the given
+          name, or <tt>nil</tt> if there is none. Analogous to the
+          <tt>fetch()</tt> member function of the <tt>Rete</tt>
+          class. See the section on <link
+          href="java.html#xfer">using store and fetch</link> for
+          details.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="first$" heading="(first$ &lt;list-expression>)">
+
+        <arguments>
+          One list</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Returns the first field of a list as a new 1-element
+          list.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="float" heading="(float &lt;numeric-expression>)">
+
+        <arguments>
+          One numeric expression</arguments>
+
+        <returns>
+          Floating-point number</returns>
+
+        <description>
+          Converts its only argument to a float.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="floatp" heading="(floatp &lt;expression>)">
+
+        <arguments>
+          One numeric expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> for floats; otherwise, returns
+          <tt>FALSE</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="focus"
+                   heading="(focus &lt;module-name>+)">
+
+        <arguments>
+          One or more symbols, the names of modules</arguments>
+
+        <returns>
+          The name of the previous focus module</returns>
+
+        <description>
+          Changes the focus module. The next time the engine runs, the
+          first rule to fire will be from the first module listed (if
+          any rules are activated in this module.) The previously
+          active module is pushed down on the focus stack. If more
+          than one module is listed, they are pushed onto the focus
+          stack in order from right to left.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="control" name="for" heading="(for
+                   &lt;initializer> &lt;condition>
+                   &lt;increment> &lt;body expression>*)">
+
+        <arguments>
+          Three or more expressions</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          Jess's <tt>for</tt> function works just like Java's
+          <tt>for</tt> loop. First the initializer is evaluated. Then
+          the condition is evaluated. If it does not evaluate to
+          FALSE, the body expressions are evaluated in order. Next,
+          the increment is evaluated, and then the condition is
+          checked again. The loop continues until the condition
+          evaluates to FALSE or until a <jessf
+          name="return"/> or <jessf name="break"/> is encountered.
+          <p/>
+          Example:
+<jess><input>(for (bind ?i 0) (&lt; ?i 10) (++ ?i)
+    (printout t ?i crlf))</input></jess>
+          In Java, the initializer, condition, or increment can be
+          empty. In Jess, you can use the constant <tt>nil</tt> as an
+          equivalent.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="control" name="foreach" heading="(foreach &lt;variable> &lt;list-expression> &lt;action>*)">
+
+        <arguments>
+          A variable, a list expression or iterator, and zero or more arguments</arguments>
+
+        <returns>
+          Varies</returns>
+
+        <description>
+          <p>The named variable is set to each value from the list, in
+          turn.  For each value, all of the other arguments are
+          evaluated in order. The <jessf name="break"/>
+          function can be used to break the iteration.</p>
+
+          <p>Example:</p>
+
+<jess><input>(foreach ?x (create$ a b c d) (printout t ?x crlf))</input><result>a
+b
+c
+d</result></jess>
+
+          <p>There are two ways to specify the series of values: you
+          can either specify a Jess list (as created by <jessf
+          name="create$"/>) or you can provide a
+          <tt>java.util.Iterator.</tt></p>
+
+
+
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="files" name="format" heading="(format &lt;router-identifier> &lt;string-expression> &lt;expression>*)">
+
+        <arguments>
+          A router identifier, a format string, and zero or more arguments</arguments>
+
+        <returns>
+          A string</returns>
+
+        <description>
+          Sends formatted output to the specified logical
+          name. Formats the arguments into a string according to the
+          format string, which is identical to that used by
+          <tt>printf</tt> in the C language (find a C book for more
+          information).  Returns the string, and optionally prints the
+          string to the named router.  If you pass <tt>nil</tt> for
+          the router name, no printing is done.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="gensym*" heading="(gensym*)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Symbol</returns>
+
+        <description>
+          Returns a special unique sequenced value. Returns a unique
+          symbol which consists of the letters <tt>gen</tt> plus an
+          integer. Use <jessf name="setgen"/> to set the
+          value of the integer to be used by the next gensym call.
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="get" heading="(get &lt;Java object> &lt;string-expression>)">
+
+        <arguments>
+          A Java object and a string.</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description> <p>Retrieves the value  of a JavaBean's property or
+          instance variable.  The first  argument is the  JavaBean and
+          the second argument is the  name of the property or
+          variable. Jess will first try to find a JavaBean property by
+          this name; if none is found, it will look for an instance variable.
+          The  return value  is  converted to  a  suitable Jess  value
+          exactly as for <link href="#call">call.</link></p>
+          <p>
+              If applied to a <apic class="jess.Fact"/> object <tt>get</tt> returns the value of the named slot,
+              exactly as for <jessf name="fact-slot-value"/>.
+          </p>
+
+          </description>
+          </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="get-member" heading="(get-member
+(&lt;Java object> | &lt;string-expression>)
+                   &lt;string-expression>)">
+
+        <arguments>
+          A Java object or a string, and a member variable name.</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          Retrieves the value of a Java object's data member. The
+          first argument is the object (or the name of a class, for a
+          static member) and the second argument is the name of the
+          field. The return value is converted to a suitable Jess
+          value exactly as for <link
+          href="#call">call.</link></description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="files" name="get-multithreaded-io" heading="(get-multithreaded-io)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns TRUE is Jess is currently using a separate thread to
+          flush I/O streams. Turning this on can lead to a modest
+          performance enhancement, at the expense of possible loss of
+          output on program termination.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="get-reset-globals" heading="(get-reset-globals)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Indicates the current setting of global variable reset
+          behavior. See <link
+          href="#set-reset-globals">set-reset-globals</link> for an
+          explanation of this property.</description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="get-salience-evaluation" heading="(get-salience-evaluation)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Symbol</returns>
+
+        <description>
+          Indicates the current setting of salience evaluation
+          behavior. See <link
+          href="#set-salience-evaluation">set-salience-evaluation</link>
+          for an explanation of this property.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="halt" heading="(halt)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Halts rule execution. No effect unless called from the RHS
+          of a rule.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="control" name="if" heading="(if &lt;expression> then &lt;action>* [elif &lt;expression> then &lt;action>*]* [else &lt;action>*])">
+
+        <arguments>
+          A Boolean expression, the symbol <tt>then</tt>,
+          and any number of additional expressions; followed (zero or more times)
+            by the symbol
+          <tt>elif</tt>, a Boolean expression, <tt>then</tt>, and another list of expressions;
+          optionally followed by the symbol
+          <tt>else</tt> and another list of expressions.</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          Allows conditional execution of a group of actions. The first
+          Boolean expression is evaluated. If it does not evaluate to
+          <tt>FALSE</tt>, the first list of actions is evaluated,
+          and the return value is that returned by the last action
+          of that list. If it does evaluate to <tt>FALSE</tt>, and there
+            are optional <tt>elif</tt> blocks, then the Boolean expression of
+            each of these is evaluated in turn; the first time one of them
+            evaluates to non-<tt>FALSE</tt>, the associated list of actions is
+            evaluated and the last result is returned. Finally, if none of the
+            expressions is non-<tt>FALSE</tt>, and the optional <tt>else</tt> block
+            is supplied, then the final list of actions
+          is evaluated and the value of the last is returned.
+
+          <p/>
+          Example:
+
+<jess>
+<setup>(bind ?x 1)</setup>
+<input>(if (> ?x 100) then
+    (printout t "X is big" crlf)
+ elif (> ?x 50) then
+    (printout t "X is average" crlf)
+ else
+    (printout t "X is small" crlf))
+</input>
+</jess>
+       </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="implode$" heading="(implode$ &lt;list-expression>)">
+
+        <arguments>
+          One list</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Creates a string from a list value. Converts each
+          element of the list to a string, and returns these
+          strings concatenated with single intervening spaces.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="import" heading="(import &lt;symbol&gt;)">
+
+        <arguments>
+          One symbol</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          <p>Works like the Java <tt>import</tt> statement. You can
+          import either a whole package using</p>
+<jess>
+<input>(import java.io.*)</input>
+</jess>
+          <p>or a single class using</p>
+<jess>
+<input>(import java.awt.Button)
+</input></jess>
+          <p>After that, all functions that can accept a Java class name
+          (<jessf name="new"/>, <jessf
+          name="defclass"/>, <jessf name="call"/>, etc) will refer to the import list
+          to try to find the class that goes with a specific
+          name. Note that <tt>java.lang.*</tt> is now implicitly
+          imported.</p>
+
+          <p>In addition, when you import a single class by name, Jess
+          will define a series of Userfunctions that provide easy
+          access to that class's static members. These functions are
+          named <i>ClassName.memberName</i>. For example, because the
+          classes in <tt>java.lang</tt> are imported this way, there
+          are functions named "Thread.currentThread",
+          "Integer.parseInt" which give access to those Java methods;
+          there are also functions named "Short.MAX_VALUE" and
+          "Thread.NORM_PRIORITY" which return the values of those Java
+          constants. </p>
+<jess>
+<setup>(bind ?i 1)</setup>
+<setup>(import java.io.*)</setup>
+<setup>(deffunction System.out ($?args) (return (new PrintWriter(new StringWriter))))</setup>
+<input>(if (> ?i (Short.MAX_VALUE)) then
+    ((System.out) println "Too large for short")
+    else
+    ((System.out) println "Would fit in a short"))</input>
+</jess>
+
+
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="insert$" heading="(insert$ &lt;list-expression> &lt;integer-expression> &lt;single-or-list-expression>+)">
+
+        <arguments>
+          A list, an integer, and one or more lists</arguments>
+
+        <returns>
+          A list</returns>
+
+        <description>
+          Returns a new list like the original but with one or
+          more values inserted. Inserts the elements of the second and
+          later lists so that they appear starting at the given
+          1-based index of the first list. An index value one greater than
+            the list length is legal and will result in the second list being
+            appended at the end
+            of the first list.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="instanceof" heading="(instanceof
+                   &lt;Java object> &lt;class-name>)">
+
+        <arguments>
+          A Java object and the name of a Java class</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns true if the Java object can be assigned
+          to a variable whose type is given by the class
+          name. Implemented using java.lang.Class.isInstance() . The
+          class name can be fully-qualified or it can be an imported
+          name; see the discussion of the <jessf
+          name="import"/> function.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="integer" heading="(integer &lt;numeric-expression>)">
+
+        <arguments>
+          One numeric expression</arguments>
+
+        <returns>
+          Integer</returns>
+
+        <description>
+          Converts its only argument to an integer. Truncates any
+          fractional component of the value of the given numeric
+          expression and returns the integral part.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="integerp" heading="(integerp &lt;expression>)">
+
+        <arguments>
+          One expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> for integers; otherwise, returns
+          <tt>FALSE</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="intersection$" heading="(intersection$ &lt;list-expression> &lt;list-expression>)">
+
+        <arguments>
+          Two lists</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Returns the intersection of two lists. Returns a
+          list consisting of the elements the two argument
+          lists have in common.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="jess-version-number" heading="(jess-version-number)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Float</returns>
+
+        <description>
+          Returns a version number for Jess; currently 7.0 .
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="jess-version-string" heading="(jess-version-string)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Returns a human-readable string descriptive of this version
+          of Jess.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="length$" heading="(length$ &lt;list-expression>)">
+
+        <arguments>
+          List</arguments>
+
+        <returns>
+          Integer</returns>
+
+        <description>
+          Returns the number of elements in a list value.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="lexemep" heading="(lexemep &lt;expression>)">
+
+        <arguments>
+          Any expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> for symbols and strings; otherwise,
+          returns <tt>FALSE</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="debugging" name="list-function$" heading="(list-function$)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Returns a list list of all the functions currently
+          callable, including intrinsics, deffunctions, and
+          <apic class="jess.Userfunction"/>s. Each function name is a symbol.  The names are
+          sorted in alphabetical order.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="load-facts" heading="(load-facts &lt;file-name>)">
+
+        <arguments>
+          A string representing the name of a file of facts</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          <p>Asserts facts loaded from a file. The argument should name a
+          file containing a list of facts (not <construct name="deffacts"/> constructs,
+          and no other commands or constructs).  Jess will parse the
+          file and assert each fact. The return value is the return
+          value of assert when asserting the last fact. In an applet,
+          <jessf name="load-facts"/> will use
+          <tt>getDocumentBase()</tt> to find the named file.  <p/>
+          <b><i>Note:</i></b> See the <jessf
+          name="batch"/> command for a discussion about
+          specifying filenames in Jess.</p>
+          <p>
+              The file can be in either of two formats. The first format is just a
+              list of facts in Jess language syntax.  The second format is an XML file
+              with a <tt>fact-list</tt> root element containing nothing but <tt>fact</tt>
+              elements, as in JessML.
+          </p>
+
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="load-function" heading="(load-function &lt;class-name>)">
+
+        <arguments>
+          The name of a Java class</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          The argument must be the fully-qualified name of a Java
+          class that implements the <apic class="jess.Userfunction"/> interface. The class
+          is loaded in to Jess and added to the engine, thus making
+          the corresponding command available. See <link
+          href="extending.html">Extending Jess with Java</link> for
+          more information.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="load-package" heading="(load-package &lt;class-name>)">
+
+        <arguments>
+          The name of a Java class</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          The argument must be the fully-qualified name of a Java
+          class that implements the <apic class="jess.Userpackage"/> interface. The class
+          is loaded in to Jess and added to the engine, thus making
+          the corresponding package of commands available.  See <link
+          href="extending.html">Extending Jess with Java</link> for
+          more information.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="log" heading="(log &lt;numeric-expression>)">
+
+        <arguments>
+          One numeric expression</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the logarithm base <tt>e</tt> of its only argument.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="log10" heading="(log10 &lt;numeric-expression>)">
+
+        <arguments>
+          One numeric expression</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the logarithm base-10 of its only argument.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="long" heading="(long &lt;expression&gt;)">
+
+        <arguments>
+          One expression, either numeric or String</arguments>
+
+        <returns>
+          RU.LONG</returns>
+
+        <description>
+          Interprets the expression as a Java long (if possible) and
+          returns a long value. This function is retained for backward
+          compatibility only, as the Jess language now allows long
+          literals.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="longp" heading="(longp &lt;expression&gt;)">
+
+        <arguments>
+          One expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns TRUE if the expression is of type RU.LONG; FALSE
+          otherwise.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="lowcase" heading="(lowcase &lt;lexeme-expression>)">
+
+        <arguments>
+          One symbol or string.</arguments>
+
+        <returns>
+          String or symbol</returns>
+
+        <description>
+          Converts uppercase characters in a string or symbol to
+          lowercase. Returns the argument as an all-lowercase symbol
+          unless the argument is a string, in which case a string is
+          returned.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="debugging" name="matches" heading="(matches &lt;lexeme-expression>)">
+
+        <arguments>
+          One symbol, a rule or query name</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Produces a printout, useful for debugging, of the
+          contents of the left and right Rete memories of each
+          two-input node on the given rule or query's
+          LHS.</description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="max" heading="(max &lt;numeric-expression>+)">
+
+        <arguments>
+          One or more numerical expressions</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the value of its largest numeric
+          argument</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="member$" heading="(member$ &lt;expression> &lt;list-expression>)">
+
+        <arguments>
+          A value and a list</arguments>
+
+        <returns>
+          Integer or FALSE</returns>
+
+        <description>
+          Returns the first position (1-based index) of a value
+          within a list; otherwise, returns
+          <tt>FALSE</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="min" heading="(min &lt;numeric-expression>+)">
+
+        <arguments>
+          One or more numeric expressions</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the value of its smallest numeric
+          argument.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="mod" heading="(mod &lt;numeric-expression> &lt;numeric-expression>)">
+
+        <arguments>
+          Two integer expressions</arguments>
+
+        <returns>
+          Integer</returns>
+
+        <description>
+          Returns the remainder of the result of dividing the first
+          argument by its second (assuming that the result of the
+          division must be an integer).
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="modify" heading="(modify &lt;fact-specifier> (&lt;slot-name> &lt;value>)+)">
+
+        <arguments>
+          A Fact and one or more two-element lists</arguments>
+
+        <returns>
+          A Fact</returns>
+
+        <description>
+          <p>Modifies a given unordered fact in working memory. The
+          first argument specifies the fact to modify, and can be
+          either a Fact object (such as you'd obtain from a pattern
+          binding) or an integer (the id number of a fact.) If you use
+          the id number, the corresponding fact must be looked up
+          using <apif class="jess.Rete" method="findFactByID(int)"/>,
+          a slow operation.  The fact must be an unordered fact.</p>
+
+          <p>Subsequent arguments are two-item lists. Each list is
+          taken as the name of a slot in this fact and a new value to
+          assign to the slot.  The fact is removed from working
+          memory, the values in the specified slots are replaced with
+          the new values, and the fact is reasserted. The fact-ID of
+          the fact does not change.  The fact itself is returned. A
+          <apic class="jess.JessEvent"/> of type FACT + MODIFIED will
+          be sent if the event mask is set appropriately.</p>
+
+          <p>Modifying a shadow fact will cause the appropriate object
+          properties to be set as well.</p>
+
+          <p>As of Jess version 7, the slot names can be
+          variables.</p>
+
+          <p>It is important to remember that all pattern-matching
+          happens during calls to <jessf name="assert"/>, <jessf
+          name="retract"/>, <jessf name="modify"/>, and related
+          functions. Pattern-matching happens whether the engine is
+          running or not.</p>
+</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="duplicate" heading="(duplicate
+                   &lt;fact-specifier> (&lt;slot-name> &lt;value>)+)">
+
+        <arguments>
+          A fact and one or more two-element lists</arguments>
+
+        <returns>
+          A fact</returns>
+
+        <description>
+         <p>
+          Makes a copy of the fact; the fact must be an unordered
+          fact. Each list is taken as the name of a slot in this fact
+          and a new value to assign to the slot. A new fact is
+          asserted which is similar to the given fact but which has
+          the specified slots replaced with new values. The new fact
+          is returned. It is an error to call <jessf
+          name="duplicate"/> on a shadow fact.</p>
+
+            <p>As of Jess version 7, the slot names can be variables.</p>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="listp" heading="(listp &lt;expression>)">
+
+        <arguments>
+          Any value</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> for list values; otherwise,
+          returns <tt>FALSE</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="multifieldp" heading="(multifieldp &lt;expression>)">
+
+        <arguments>
+          Any value</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          <b>Deprecated.</b> Use <jessf name="listp"/> instead.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="neq" heading="(neq &lt;expression> &lt;expression>+)">
+
+        <arguments>
+          Two or more values</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          <p>
+          Returns <tt>TRUE</tt> if the first argument is not equal in
+          type and value to all subsequent arguments (see <jessf
+          name="eq"/>).
+          </p>
+          <p>
+          While often used in procedural code, this function is only
+          rarely used during pattern matching. Direct matching is
+          preferable.
+          </p>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+        <functiondef topic="java" name="new" heading="(new &lt;class-name> &lt;argument>*)">
+
+            <arguments>
+            The name of a Java class and zero or more expressions</arguments>
+
+            <returns>
+          Boolean</returns>
+
+            <description>
+          Creates a new Java object and returns it. The first
+          argument is the class name:
+                <tt>java.util.Vector</tt>, for example. The second and later
+          arguments are constructor arguments.  The constructor will
+          be chosen from among all constuctors for the named class
+          based on a <i>first-best fit</i> algorithm. Built-in Jess
+          types are converted as necessary to match available
+          constructors. See the text for more details. Also see the
+          <jessf name="import"/> function.</description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="java" name="set-value-class" heading="(set-value-class &lt;string-expression> TRUE|FALSE)">
+
+            <arguments>
+          The name of a Java class</arguments>
+
+          <returns>
+            TRUE</returns>
+
+          <description>
+            <p>A <i>value object</i> is an instance of a class that represents a specific value.
+            They are often immutable like Integer, Double, and String. For Jess's purposes, a value object
+            is one whose <tt>hashCode()</tt> method returns a constant -- i.e., whose hash code doesn't change
+            during normal operation of the class. Integer, Double, and all the other wrapper classes
+            qualify, as does String, and generally all immutable classes. Any class that doesn't override the
+            default <tt>hashCode()</tt> method also qualifies as a value object by the definition. Java's
+            Collection classes (Lists, Maps, Sets, etc.) are classic examples of classes that are <i>not</i>
+            value objects, because their hash codes depend on the collection's contents.</p>
+
+            <p>As far as Jess is concerned, an object is a value object as long as its hash code won't
+            change while the object is in working memory. This includes the case where the object is contained in a slot
+            of any fact. If the hash code will only change during calls to <jessf name="modify"/>, then the object
+            is still a value object.</p>
+
+            <p>Jess can make certain assumptions about value objects that lead to large performance increases
+            during pattern matching. Because many classes are actually value classes by Jess's broad definition,
+            <i>Jess now assumes that all objects (except for Maps and Collections) are value objects by default.</i> If you're working
+            with a class that is <i>not</i> a value class, it's very important that you tell Jess about it by
+            using the set-value-class function or the static method <apif class="jess.HashCodeComputer" method="setIsValueClass(Rete, String, boolean)"/>
+            Failure to do so will lead to undefined (bad) behavior.</p>
+          </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+      <functiondef topic="logic" name="not" heading="(not &lt;expression>)">
+
+        <arguments>
+          One expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if its only arguments evaluates to
+          <tt>FALSE</tt>; otherwise, returns <tt>FALSE</tt>. Note that
+          this function is distinct from the <link
+          href="rules.html#not_ce">not conditional element.</link>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="nth$" heading="(nth$ &lt;integer-expression> &lt;list-expression>)">
+
+        <arguments>
+          A number and a list</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          Returns the value of the specified (1-based index) field of
+          a list value.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="numberp" heading="(numberp &lt;expression>)">
+
+        <arguments>
+          One expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> for numbers; otherwise, returns
+          <tt>FALSE</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="oddp" heading="(oddp &lt;integer-expression>)">
+
+        <arguments>
+          One integer expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> for odd numbers; otherwise, returns
+          <tt>FALSE</tt>; see <jessf name="evenp"/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="files" name="open" heading="(open &lt;file-name> &lt;router-identifier> [r|w|a])">
+
+        <arguments>
+          A file name, an identifier for the file (a symbol), and optionally a
+          mode string, one of r, w, a.
+        </arguments>
+
+        <returns>
+          The file identifier, a router name.
+        </returns>
+
+        <description>
+          Opens a file. Subsequently, the given router identifier can
+          be passed to <jessf name="printout"/>, <jessf
+          name="read"/>, <jessf
+          name="readline"/>, or any other functions
+          that accept I/O routers as arguments. By default, the file
+          is opened for reading; if a mode string is given, it may be
+          opened for reading only (<tt>r</tt>), writing only
+          (<tt>w</tt>), or appending (<tt>a</tt>).  <p/>
+          <b><i>Note:</i></b> See the <jessf
+          name="batch"/> command for a discussion about
+          specifying filenames in Jess.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="logic" name="or" heading="(or &lt;expression>+)">
+
+        <arguments>
+          One or more expressions</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if any of the arguments evaluates to a
+          non-<tt>FALSE</tt> value; otherwise, returns
+          <tt>FALSE</tt>.  Note that
+          this function is distinct from the <link
+          href="rules.html#or_ce">or conditional element.</link>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="pi" heading="(pi)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the number <tt>pi</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="ppdeffunction" heading="(ppdeffunction &lt;symbol>)">
+
+        <arguments>
+          The name of a deffunction</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Returns a pretty-print representation of a <construct name="deffunction"/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="ppdefglobal" heading="(ppdefglobal &lt;symbol>)">
+
+        <arguments>
+          The name of a defglobal</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Returns a pretty-print representation of a <construct name="defglobal"/>
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="ppdefquery" heading="(ppdefquery &lt;symbol> | *)">
+
+        <arguments>
+          The name of a defquery or *</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+            An alias for <jessf name="ppdefrule"/> .
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="ppdefrule" heading="(ppdefrule &lt;symbol> | *)">
+
+        <arguments>
+          The name of a rule or query, or the symbol *</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Returns a pretty-print rendering of a <construct
+          name="defrule"/> or <construct name="defquery"/>. If the
+          argument is the symbol "*", a single string containing all
+          existing rules and queries in alphabetical order of their
+          names is returned.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="ppdeffacts" heading="(ppdeffacts &lt;symbol>)">
+
+        <arguments>
+          The name of a deffacts</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Returns a pretty-print rendering of a <construct name="deffacts"/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="ppdeftemplate" heading="(ppdeftemplate &lt;symbol>)">
+
+        <arguments>
+          The name of a template</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Returns a pretty-print representation of a <construct name="deftemplate"/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="files" name="printout" heading="(printout &lt;router-identifier> &lt;expression>*)">
+
+        <arguments>
+          A router identifier followed by zero or more expressions</arguments>
+
+        <returns>
+          nil</returns>
+
+        <description>
+          Sends unformatted output to the specified logical
+          name. Prints its arguments to the named router, which must
+          be open for output. No spaces are added between
+          arguments. The special symbol <tt>crlf</tt> prints as a
+          newline.  The special router name <tt>t</tt> can be used to
+          signify standard output.</description>
+      </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="control" name="progn" heading="(progn &lt;expression>*)">
+
+            <arguments>
+                Zero or more expressions</arguments>
+
+            <returns>
+                The result of evaluating the last expression, or nil</returns>
+
+            <description>
+                A simple control structure that allows you to group multiple
+                function calls where syntactically only one is allowed - for
+                instance, on the LHS of a rule.</description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="math" name="random" heading="(random)">
+
+            <arguments>
+                None</arguments>
+
+            <returns>
+                Number</returns>
+
+            <description>
+                Returns a pseudo-random integer between 0 and 65536.
+            </description>
+        </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="files" name="read" heading="(read [&lt;router-identifier>])">
+
+        <arguments>
+          An optional input router identifier (when omitted t is the default)</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          Reads a single-field value from a specified logical
+          name. Read a single symbol, string, or number from the named
+          router, returns this value. The router <tt>t</tt> means
+          standard input. Newlines are treated as ordinary whitespace.
+          If you need to parse text line-by-line, use <jessf
+          name="readline"/> and <jessf name="explode$"/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="files" name="readline" heading="(readline [&lt;router-identifier>])">
+
+        <arguments>
+          An optional input router identifier (when omitted t is the default)</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Reads an entire line as a string from the specified logical
+          name (router).  The router <tt>t</tt> means standard input.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="replace$" heading="(replace$ &lt;list-expression> &lt;begin-integer-expression> &lt;end-integer-expression> &lt;expression>+)">
+
+        <arguments>
+          A list, two numeric expressions, and one or more additional
+          single or list values</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Returns a copy of a the original list with the
+          elements in a specified range replaced with a new set of
+          values.  The variable number of final arguments are inserted
+          into the first list, replacing elements between the
+          1-based indices given by the two numeric arguments,
+          inclusive.
+
+          Example:
+
+<jess>
+<input>(replace$ (create$ a b c) 2 2 (create$ x y z))</input>
+<result>(a x y z c)</result>
+</jess>
+
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="reset" heading="(reset)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Removes all facts from working memory, removes all
+          activations, then asserts the fact <tt>(initial-fact)</tt>,
+          then asserts all facts found in deffacts, asserts a fact
+          representing each registered Java object, and (if the
+          set-reset-globals property is TRUE) initializes all
+          defglobals.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="rest$" heading="(rest$ &lt;list-expression>)">
+
+        <arguments>
+          One list</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Returns all but the first field of a list as a new
+          list.
+        </description>
+      </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="facts" name="retract" heading="(retract &lt;expression>+)">
+
+            <arguments>
+                One or more <apic class="jess.Fact"/> objects or integers</arguments>
+
+            <returns>
+                TRUE</returns>
+
+            <description>
+                <p>Retracts the facts given. Retracting a
+                shadow fact will result in an implicit call to
+                <jessf name="undefinstance"/> for the corresponding object (the object
+                will no longer be pattern-matched). A <apic class="jess.JessEvent"/> of type
+                FACT + REMOVED will be sent if the event mask is set
+                appropriately. Note that the arguments to this function
+                must be integers or actual <apic class="jess.Fact"/>
+                objects; they cannot be explicit facts as are accepted by
+                <jessf name="assert"/>.</p>
+                <p>It is important to remember that all pattern-matching
+                    happens during calls to <jessf name="assert"/>, <jessf
+                        name="retract"/>, <jessf name="modify"/>, and related
+                    functions. Pattern-matching happens whether the engine is
+                    running or not.</p>
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="facts" name="remove" heading="(remove &lt;symbol>)">
+
+            <arguments>
+                A symbol, the name of a template</arguments>
+
+            <returns>
+                (Nothing)</returns>
+
+            <description>
+                <p>Retracts all the facts currently in working memory that use the given template. Removing
+                a shadow fact template will result in an implicit call to
+                <jessf name="undefinstance"/> for the corresponding objects (the objects
+                will no longer be pattern-matched). A <apic class="jess.JessEvent"/> of type
+                FACT + REMOVED will be sent for each fact removed if the event mask is set
+                appropriately.</p>
+                <p>It is important to remember that all pattern-matching
+                    happens during calls to <jessf name="assert"/>, <jessf
+                        name="retract"/>, <jessf name="modify"/>, and related
+                    functions. Pattern-matching happens whether the engine is
+                    running or not.</p>
+            </description>
+        </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="retract-string" heading="(retract-string &lt;string>)">
+
+        <arguments>
+          A string, a representation of a Fact</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Parses the string as a Fact; if such a fact exists in
+          working memory, calls <jessf name="retract"/>
+          on it.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="control" name="return" heading="(return [&lt;expression>])">
+
+        <arguments>
+          An optional expression</arguments>
+
+        <returns>
+          (Varies)</returns>
+
+        <description>
+          From a <construct name="deffunction"/>, returns the given value and exits the
+          deffunction immediately. From the RHS of a <construct name="defrule"/>, terminates
+          the rule's execution immediately and pops the current focus
+          module from the focus stack. No argument should be given
+          when return is called from the RHS of a rule.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="round" heading="(round &lt;numeric-expression>)">
+
+        <arguments>
+          One numeric expression</arguments>
+
+        <returns>
+          Integer</returns>
+
+        <description>
+          Rounds its argument to the closest integer.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="rules" heading="(rules [ &lt;module-name&gt; | * ])">
+
+        <arguments>
+          Optionally, a module name, or the symbol "*"</arguments>
+
+        <returns>
+          nil</returns>
+
+        <description>
+          With no arguments, prints a list of all rules and queries in
+          the current module (not the focus module) to the 't'
+          router. With a module name for an argument, prints the names
+          of the rules and queries in that module. With "*" as an
+          argument, prints the names of all rules and queries.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="run" heading="(run [&lt;integer>])">
+
+        <arguments>
+          Optionally, a single integer</arguments>
+
+        <returns>
+            Integer</returns>
+
+        <description>
+          Starts the inference engine. If no argument is supplied,
+          Jess will keep running until no more activations remain or
+          <jessf name="halt"/> is called. If an argument is
+          supplied, it gives the maximum number of rules to fire
+          before stopping. The function returns the number of rules
+          actually fired.
+        </description>
+      </functiondef>
+        <!-- *********************************************************** -->
+        <functiondef topic="queries" name="run-query" heading="(run-query &lt;query-name> &lt;expression>*)">
+
+            <arguments>
+                The name of a query, and zero or more additional expressions</arguments>
+
+            <returns>
+                A <javac class="java.util.Iterator"/></returns>
+
+            <description>
+                <p><b>Deprecated.</b> Use <jessf name="run-query*"/>
+               instead.</p>
+                Runs a <link href="queries.html">query</link>
+                and returns a <tt>java.util.Iterator</tt> of the
+                matches. See the documentation for <link
+                href="queries.html">defquery</link> for more
+                details. Note that run-query can lead to backwards
+                chaining, which can cause rules to fire; thus if
+                run-query is called on a rule RHS, other rules' RHSs
+                may run to completion before the instigating rule
+                completes. Putting run-query on a rule RHS can also
+                cause the count of executed rules returned by <jessf
+                name="run"/> to be low.
+                <p>
+                    Note that the <tt>Iterator</tt> returned by this
+                    function should be used immediately. It will
+                    become invalid if any of the following functions
+                    are called before you've used it: <tt>reset</tt>,
+                    <tt>count-query-results</tt>, or
+                    <tt>run-query</tt>. It <i>may</i> become invalid
+                    if any of the following are called:
+                    <tt>assert</tt>, <tt>retract</tt>,
+                    <tt>modify</tt>, or <tt>duplicate</tt>, and if any
+                    of the affected facts are involved in the active
+                    query's result.
+                </p>
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+        <functiondef topic="queries" name="run-query*" heading="(run-query* &lt;query-name> &lt;expression>*)">
+
+            <arguments>
+                The name of a query, and zero or more additional expressions</arguments>
+
+            <returns>
+                A <apic class="jess.QueryResult"/></returns>
+
+            <description>
+                Runs a <link href="queries.html">query</link>
+                and returns a <apic class="jess.QueryResult"/> of the
+                matches. See the documentation for <link
+                href="queries.html">defquery</link> for more
+                details. Note that run-query can lead to backwards
+                chaining, which can cause rules to fire; thus if
+                run-query is called on a rule RHS, other rules' RHSs
+                may run to completion before the instigating rule
+                completes. Putting <jessf name="run-query*"/> on a rule RHS can also
+                cause the count of executed rules returned by <jessf
+                name="run"/> to be low.
+            </description>
+        </functiondef>
+
+      <!-- *********************************************************** -->
+      <functiondef topic="engine" name="run-until-halt" heading="(run-until-halt)">
+
+        <arguments>
+          None.</arguments>
+
+        <returns>
+          Integer</returns>
+
+        <description>
+          Runs the engine until <jessf name="halt"/> is
+          called. Returns the number of rules fired. When there are no
+          active rules, the calling thread will be blocked waiting on
+          the activation semaphore.
+        </description>
+      </functiondef>
+        <!-- *********************************************************** -->
+
+        <functiondef topic="facts" name="save-facts" heading="(save-facts &lt;file-name> [&lt;template-name>])">
+
+            <arguments>
+                A filename, and optionally a symbol</arguments>
+
+            <returns>
+                Boolean</returns>
+
+            <description>
+                <p>Saves facts to a file in Jess language format. Attempts to open the named file for
+                writing, and then writes a list of all facts in working
+                memory to the file. This file is suitable for reading with
+                <jessf name="load-facts"/>. If the optional second argument is given, only
+                facts whose head matches this symbol will be saved.
+                </p>
+                <p><b><i>Note:</i></b> See the <jessf
+                    name="batch"/> command for a discussion about
+                specifying filenames in Jess.</p>
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="facts" name="save-facts-xml" heading="(save-facts-xml &lt;file-name> [&lt;template-name>])">
+
+            <arguments>
+
+                A filename, and optionally a symbol</arguments>
+
+            <returns>
+                Boolean</returns>
+
+            <description>
+                <p>Saves facts to a file in XML format.
+                    This function attempts to open the named file for
+                writing, and then writes a list of all facts in working
+                memory to the file. A well-formed document
+                    containing an XML declaration, a <tt>fact-list</tt> root element, and
+                    one <tt>fact</tt> element for each fact will be written.
+                    This file is suitable for reading with
+                <jessf name="load-facts"/>. If the optional second argument is given, only
+                facts whose head matches this symbol will be saved.</p>
+                <p><b><i>Note:</i></b> See the <jessf
+                    name="batch"/> command for a discussion about
+                specifying filenames in Jess.</p>
+            </description>
+        </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="set" heading="(set &lt;Java object> &lt;string-expression> &lt;expression>)">
+
+        <arguments>
+          A Java object, a property name, and an expression</arguments>
+
+        <returns>
+          The last argument</returns>
+
+        <description> Sets a JavaBean's property or instance variable
+          to the given value. The first argument is the Bean object;
+          the second argument is the name of the property or
+          variable. The third value is the new value for the property;
+          the same conversions are applied as for <jessf name="new"/>
+          and <jessf name="call"/>. Jess will first try to find a
+          JavaBean property by the given name; if none is found, it
+          will look for an instance variable.</description>
+
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="set-factory" heading="(set-factory &lt;factory object&gt; )">
+
+        <arguments>
+          An object that implements the interface
+          <apic class="jess.factory.Factory"/></arguments>
+
+        <returns>
+          A <apic class="jess.factory.Factory"/>
+        </returns>
+
+        <description>
+          Set the "thing factory" for the active Rete
+          object. Providing an alternate "thing factory" is a very
+          advanced, and currently undocumented, way to extend Jess's
+          functionality.
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="set-member" heading="(set-member
+(&lt;Java object> | &lt;string-expression>) &lt;string> &lt;expression>)">
+
+        <arguments>
+          A Java object or class name, a member variable name and an expression</arguments>
+
+        <returns>
+          The last argument</returns>
+
+        <description>
+          Sets a Java object's member variable to the given value. The
+          first argument is the object (or the name of the class, in
+          the case of a static member variable). The second argument
+          is the name of the variable. The third value is the new
+          value for the variable; the same conversions are applied as
+          for <jessf name="new"/> and <jessf
+          name="call"/>.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="files" name="set-multithreaded-io" heading="(set-multithreaded-io (TRUE | FALSE))">
+
+        <arguments>
+          Boolean</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Specify whether Jess should use a separate thread to flush
+          I/O streams. Turning this on can lead to a modest
+          performance enhancement, at the expense of possible loss of
+          output on program termination. Returns the previous value of
+          this property.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="set-node-index-hash" heading="(set-node-index-hash &lt;integer>)">
+
+        <arguments>
+          One integral value</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Sets the default hashing key used in all Rete network join
+          node memories defined after the function is called; this
+          function will not affect parts of the network already in
+          existence at the time of the call. A small value will give
+          rise to memory-efficient nodes; a larger value will use more
+          memory. If the created nodes will generally have to remember
+          many partial matches, large numbers will lead to faster
+          performance; the opposite may be true for nodes which will
+          rarely hold more than one or two partial matches. This
+          function sets the default; explicit <tt>declare</tt>
+          statements can override this for specific rules.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="set-reset-globals" heading="(set-reset-globals &lt;Boolean&gt;)">
+
+        <arguments>
+          One Boolean value </arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Changes the current setting of the global variable reset
+          behavior. If this property is set to TRUE (the default),
+          then the (reset) command reinitializes the values of global
+          variables to their initial values (if the initial value was
+          a function call, the function call is reexecuted.) If the
+          property is set to FALSE, then (reset) will not
+          affect global variables. Note that in previous versions of
+          Jess, defglobals were always reset; but if the initial value
+          was set with a function call, the function was <b>not</b>
+          reevaluated. Now it is.</description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="set-salience-evaluation" heading="(set-salience-evaluation (when-defined | when-activated | every-cycle))">
+
+        <arguments>
+          One of the symbols <tt>when-defined</tt>, <tt>when-activated</tt>, or <tt>every-cycle</tt></arguments>
+
+        <returns>
+          One of the potential arguments (the previous value of this property)</returns>
+
+        <description>
+          Changes the current setting of the salience evaluation
+          behavior. By default, a rule's salience will be determined
+          once, when the rule is defined (when-defined.)  If this
+          property is set to when-activated, then the salience of each
+          rule will be redetermined immediately before each time it is
+          placed on the agenda.  If the property is set to
+          every-cycle, then the salience of every rule is redetermined
+          immediately after each time any rule fires.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="set-strategy" heading="(set-strategy &lt;strategy-name&gt;)">
+
+        <arguments>
+          A symbol or string representing the name of a strategy (can
+          be a fully-qualifed Java class name). You can use <tt>depth</tt> and
+          <tt>breadth</tt> to represent the two built-in
+          strategies.</arguments>
+
+        <returns>
+          The previous strategy as a symbol.</returns>
+
+        <description>
+          Lets you specify the <i>conflict resolution strategy</i>
+          Jess uses to order the firing of rules of equal
+          salience. Currently, there are two strategies available:
+          <i>depth</i> <i>(LIFO)</i> and <i>breadth (FIFO).</i> When
+          the depth strategy is in effect (the default), more recently
+          activated rules are fired before less recently activated
+          rules of the same salience. When the breadth strategy is
+          active, rules of the same salience fire in the order in
+          which they are activated. Note that in either case, if
+          several rules are activated simultaneously (i.e., by the
+          same fact-assertion event) the order in which these several
+          rules fire is unspecified, implementation-dependent and
+          subject to change. More built-in strategies may be added in
+          the future.  You can implement your own strategies
+          in Java by creating a class that implements the
+          <tt>jess.Strategy</tt> interface and then specifying its
+          fully-qualified classname as the argument to <jessf
+          name="set-strategy"/>.  Details can be
+          gleaned from the source.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="get-strategy" heading="(get-strategy)">
+
+        <arguments>
+          (None)</arguments>
+
+        <returns>
+          A symbol, the name of the current conflict resolution strategy.</returns>
+
+        <description>
+            Returns the name of the current conflict resolution
+          strategy. See <jessf
+          name="set-strategy"/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="setgen" heading="(setgen &lt;numeric-expression>)">
+
+        <arguments>
+          A numeric expression</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Sets the starting number used by <jessf
+          name="gensym*"/>. Note that if this number has
+          already been used, <jessf name="gensym*"/>
+          uses the next larger number that has not been used.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="show-deffacts" heading="(show-deffacts)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          nil</returns>
+
+        <description>
+          Displays all defined <construct name="deffacts"/> to the 't' router.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="show-deftemplates" heading="(show-deftemplates)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          nil</returns>
+
+        <description>
+          Displays all defined <construct name="deftemplate"/>s to the 't'
+          router.
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="debugging" name="show-jess-listeners" heading="(show-jess-listeners)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          nil</returns>
+
+        <description>
+          Displays all <apic class="jess.JessListener"/>s registered with the
+          engine to the 't' router.
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="files" name="socket" heading="(socket &lt;Internet-hostname> &lt;TCP-port-number> &lt;router-identifier>)">
+
+        <arguments>
+          An Internet hostname, a TCP port number, and a router identifier</arguments>
+
+        <returns>
+          The router identifier</returns>
+
+        <description>
+          Somewhat equivalent to <jessf name="open"/>,
+          except that instead of opening a file, opens an unbuffered
+          TCP network connection to the named host at the named port,
+          and installs it as a pair of read and write routers under
+          the given name.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="sqrt" heading="(sqrt &lt;numeric-expression>)">
+
+        <arguments>
+          A numeric expression</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the square root of its only argument.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="store" heading="(store &lt;string or symbol&gt; &lt;expression&gt;)">
+
+        <arguments>
+          A string or symbol and any other value</arguments>
+
+        <returns>
+          (varies)</returns>
+
+        <description>
+          Associates the expression with the name given by the first
+          argument, such that later calls to the <jessf
+          name="fetch"/> will retrieve it. Storing the
+          symbol nil will clear any value associated with
+          name. Analagous to the <tt>store()</tt> member function of
+          the <apic class="jess.Rete"/> class. See section on <link
+          href="java.html#xfer">using store and fetch</link> for
+          more details.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="str-cat" heading="(str-cat &lt;expression>*)">
+
+        <arguments>
+          Zero or more expressions</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Concatenates its arguments as strings to form a single
+          string. For Java objects, the toString() method of the
+          contained object is called.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="str-compare" heading="(str-compare &lt;string-expression> &lt;string-expression>)">
+
+        <arguments>
+          Two symbols or strings</arguments>
+
+        <returns>
+          Integer</returns>
+
+        <description>
+          Lexicographically compares two strings. Returns 0 if the
+          strings are identical, a negative integer if the first is
+          lexicographically less than the second, a positive integer
+          if lexicographically greater.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="str-index" heading="(str-index &lt;lexeme-expression> &lt;lexeme-expression>)">
+
+        <arguments>
+          Two symbols or strings</arguments>
+
+        <returns>
+          Integer or FALSE</returns>
+
+        <description>
+          Returns the position of the first argument within the second
+          argument.  This is the 1-based index at which the first
+          string first appears in the second; otherwise, returns
+          <tt>FALSE</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="str-length" heading="(str-length &lt;lexeme-expression>)">
+
+        <arguments>
+          A symbol or string</arguments>
+
+        <returns>
+          Integer</returns>
+
+        <description>
+          Returns the length of a symbol in characters.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="stringp" heading="(stringp &lt;expression>)">
+
+        <arguments>
+          One expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> for strings; otherwise, returns
+          <tt>FALSE</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="sub-string" heading="(sub-string &lt;begin-integer-expression> &lt;end-integer-expression> &lt;string-expression>)">
+
+        <arguments>
+          Two numbers and a string</arguments>
+
+        <returns>
+          String</returns>
+
+        <description>
+          Retrieves a subportion from a string. Returns the string
+          consisting of the characters between the two 1-based indices
+          of the given string, inclusive. Both index values must not be
+          less than 1 or greater than the string length. A begin
+          index that is equal to the end index plus one results in the
+          null string.
+
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="subseq$" heading="(subseq$ &lt;list-expression&gt; &lt;begin-integer-expression&gt; &lt;end-integer-expression&gt;)">
+
+        <arguments>
+          A list and two numeric expressions</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Extracts the specified range from a list value
+          consisting of the elements between the two 1-based indices
+          of the given list, inclusive.  Index values less than 1 and
+          greater than the list length are accepted, and so is a
+          begin index greater than an end index, resulting in an
+          empty list.
+
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="subsetp" heading="(subsetp &lt;list-expression> &lt;list-expression>)">
+
+        <arguments>
+          Two lists</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> if the first argument is a subset of
+          the second (i.e., all the elements of the first list
+          appear in the second list); otherwise, returns
+          <tt>FALSE</tt>.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="sym-cat" heading="(sym-cat &lt;expression>*)">
+
+        <arguments>
+          Zero or more expressions</arguments>
+
+        <returns>
+          Symbol</returns>
+
+        <description>
+          Concatenates its arguments as strings to form a single
+          symbol. For Java objects, the
+          toString() method of the contained object is
+          called.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="predicates" name="symbolp" heading="(symbolp &lt;expression>)">
+
+        <arguments>
+          One expression</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Returns <tt>TRUE</tt> for symbols; otherwise, returns
+          <tt>FALSE</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="system" heading="(system &lt;lexeme-expression>+ [&amp;])">
+
+        <arguments>
+          One or more symbols or strings</arguments>
+
+        <returns>
+          a <javac class="java.lang.Process"/> object, or FALSE</returns>
+
+        <description>
+          Sends a command to the operating system. Each symbol or string
+          becomes one element of the argument array in a call to the
+          Java <tt>java.lang.Runtime.exec(String[] cmdaray)</tt>
+          method; therefore to execute the command <tt>edit
+          myfile.txt</tt>, you should call <tt>(system edit
+          myfile.txt)</tt>, not (system "edit myfile.txt").  <p/>
+          Normally blocks (i.e., Jess stops until the launched
+          application returns), but if the last argument is an
+          ampersand (<tt>&amp;</tt>), the program will run in the
+          background. The standard output and standard error streams
+          of the process are connected to the 't' router, but the
+          input of the process is not connected to the terminal.  <p/>
+          Returns the Java Process object. You can call <tt>waitFor</tt> and
+          then <tt>exitValue</tt> to get the exit status of the process.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="throw" heading="(throw &lt;java-object>)">
+
+        <arguments>
+          A Java object that must inherit from <javac class="java.lang.Throwable"/></arguments>
+
+        <returns>
+          Does not return</returns>
+
+        <description>
+          Throws the given exception object. If the object is a
+          <apic class="jess.JessException"/>, throws it directly. If the object is
+          some other type of exception, it is wrapped in a
+          <tt>JessException</tt> before throwing. The object's stack
+          trace is filled in such that the exception will appear to
+          have been created by the <jessf name="throw"/>
+          function.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="misc" name="time" heading="(time)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the number of seconds since 12:00 AM, Jan 1, 1970.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="try" heading="(try &lt;expression>* [catch &lt;expression>*] [finally &lt;expression>*])">
+
+        <arguments>
+          One or more expressions, followed optionally by the symbol
+          <tt>catch</tt> followed by zero or more expressions, followed
+          optionally by the symbol <tt>finally</tt> followed by zero or more
+          expressions. Either the <tt>catch</tt>, or the <tt>finally</tt>, or both must
+          be included.
+        </arguments>
+        <returns>(Varies)</returns>
+
+        <description>
+          This command works something like Java <tt>try</tt> with a
+          few simplifications.  The biggest difference is that the
+          <tt>catch</tt> clause can specify neither a type of
+          exception nor a variable to receive the exception
+          object. All exceptions occurring in a <jessf
+          name="try"/> block are routed to the single
+          <tt>catch</tt> block. The variable <tt>?ERROR</tt> is made
+          to point to the exception object. For example:
+
+<jess><input>
+(try
+    (open NoSuchFile.txt r)
+ catch
+    (printout t (call ?ERROR toString) crlf))
+</input></jess>
+
+          prints
+
+          <shell>
+Jess reported an error in routine open
+    while executing (open NoSuchFile.txt r).
+Message: I/O Exception.
+          </shell>
+
+          <p/>An empty <tt>catch</tt> block is fine. It just signifies
+          ignoring possible errors.  <p/>The code in the
+          <tt>finally</tt> block, if present, is executed after all
+          try and/or catch code has executed, immediately before the
+          <jessf name="try"/> function returns.
+
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="undefadvice" heading="(undefadvice &lt;function-name> | ALL | &lt;list>)">
+
+        <arguments>
+          A function name, or ALL, or a list of function names</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          Removes all advice from the named function(s).
+        </description>
+      </functiondef>
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="undefinstance" heading="(undefinstance (&lt;java-object> | * ))">
+
+        <arguments>
+          A Java object, or the symbol "*"</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          If the object currently has a shadow fact, it is removed
+          from the working memory. Furthermore, if the object has a
+          <javac class="java.beans.PropertyChangeListener"/> installed, this is removed
+          as well. If the argument is "*" this is done for all Java
+          objects in working memory.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="undefrule" heading="(undefrule &lt;rule-name>)">
+
+        <arguments>
+          The name of a rule</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Deletes a rule. Removes the named rule from the Rete network
+          and returns <tt>TRUE</tt> if the rule existed. This rule
+          will never fire again.
+        </description>
+      </functiondef>
+
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="undeffacts" heading="(undeffacts &lt;deffacts-name> | *)">
+
+        <arguments>
+          The name of a deffacts, or the symbol "*"</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Deletes a deffacts. The next time the engine is reset, the
+          facts in that deffacts will not be asserted. If the argument
+          is "*", all deffacts are deleted.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="lists" name="union$" heading="(union$ &lt;list-expression>+)">
+
+        <arguments>
+          One or more lists</arguments>
+
+        <returns>
+          List</returns>
+
+        <description>
+          Returns a new list consisting of the union of all of
+          its list arguments (i.e., of all the elements that
+          appear in any of the arguments with duplicates removed).
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="debugging" name="unwatch" heading="(unwatch &lt;symbol>)">
+
+        <arguments>
+          One or more of the symbols <tt>all</tt>, <tt>rules</tt>, <tt>compilations</tt>, <tt>activations</tt>, <tt>facts</tt>, <tt>focus</tt></arguments>
+        <returns></returns>
+
+        <description>
+          Causes trace output to not be printed for the given
+          indicators. See <tt>watch</tt>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="upcase" heading="(upcase &lt;lexeme-expression>)">
+
+        <arguments>
+          A string or symbol</arguments>
+
+        <returns>
+          A string or symbol</returns>
+
+        <description>
+          Converts lowercase characters in a string or symbol to
+          uppercase. Returns the argument as an all-uppercase symbol,
+          unless the argument is a string, in which case a string is
+          returned.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="debugging" name="view" heading="(view)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          TRUE</returns>
+
+        <description>
+          The view command displays a live snapshot of the Rete
+          network in a graphical window. See <link
+          href="rete.html">How Jess Works</link> for details.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="debugging" name="set-watch-router" heading="(set-watch-router &lt;router-name>)">
+
+        <arguments>
+            A symbol, the name of a valid output router
+        </arguments>
+
+        <returns>
+          The previous watch router name</returns>
+
+        <description>
+            Sets the router that the output from <jessf name="watch"/> goes to. The old value is returned.
+            Note that the watch router is not reset by <jessf name="reset"/> or <jessf name="clear"/>.
+        </description>
+      </functiondef>
+        <!-- *********************************************************** -->
+
+        <functiondef topic="debugging" name="watch" heading="(watch &lt;symbol&gt;)">
+
+            <arguments>
+          One or more of the symbols <tt>all</tt>, <tt>rules</tt>, <tt>compilations</tt>, <tt>activations</tt>, <tt>facts</tt>, <tt>focus</tt></arguments>
+
+            <returns>
+          TRUE</returns>
+
+            <description>
+          Produces additional debug output when specific events happen
+          in Jess, depending on the argument(s). Any number of different
+          watches can be active simultaneously:
+
+                <ul>
+                    <li>
+                        <tt>rules</tt>: prints a message when any rule
+              fires.</li>
+
+                    <li>
+                        <tt>compilations</tt>: prints a message when any rule is
+              compiled.</li>
+
+                    <li>
+                        <tt>activations</tt>: prints a message when any rule is
+              activated, or deactivated, showing which facts have
+              caused the event.</li>
+
+                    <li>
+                        <tt>facts</tt>: print a message whenever a fact is
+              asserted or retracted.</li>
+                    <li>
+                        <tt>focus</tt>: print a message for each change to the
+              module focus stack.</li>
+
+                    <li>
+                        <tt>all</tt>: all of the above.
+                    </li>
+                </ul>
+            </description>
+        </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="control" name="while" heading="(while &lt;expression> [do] &lt;action>*)">
+
+        <arguments>
+          A Boolean expression, the symbol <tt>do</tt>, and
+          zero or more expressions</arguments>
+
+        <returns>
+          (Varies)
+        </returns>
+
+        <description>
+          Allows conditional looping. Evaluates the boolean expression
+          repeatedly.  As long as it does not equal <tt>FALSE</tt>,
+          the list of other expressions are evaluated. A <jessf
+          name="break"/> also terminates the iteration. The value of
+          the last expression evaluated is the return
+          value of this function.</description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="math" name="*" heading="(* &lt;numeric-expression> &lt;numeric-expression>+)">
+
+        <arguments>
+          Two or more numeric expressions</arguments>
+
+        <returns>
+          Number</returns>
+
+        <description>
+          Returns the products of its arguments. The return value is
+          an <tt>INTEGER</tt> or <tt>LONG</tt> unless any of the
+          arguments are <tt>FLOAT</tt>, in which case it is a
+          <tt>FLOAT</tt>.
+        </description>
+
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="get-focus" heading="(get-focus)">
+
+        <arguments>
+          None</arguments>
+
+        <returns>
+          Symbol</returns>
+
+        <description>
+          Returns the name of the current focus module (see <link
+          href="#focus">focus</link>).
+        </description>
+
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="set-current-module"
+                   heading="(set-current-module &lt;module-name>)">
+
+        <arguments>
+          The name of a valid module
+        </arguments>
+
+        <returns>
+          The name of the previous current module
+        </returns>
+
+        <description>
+          Sets the current module. Any constructs defined without
+          explicitly naming a module are defined in the current
+          module. Note that defining a defmodule also sets the current
+          module.
+        </description>
+
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="get-current-module"
+                   heading="(get-current-module)">
+
+        <arguments>
+          None
+        </arguments>
+
+        <returns>
+          The name of the current module
+        </returns>
+
+        <description>
+          Gets the current module (see <link href="#set-current-module">set-current-module</link>).
+        </description>
+
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="list-focus-stack"
+                   heading="(list-focus-stack)">
+
+        <arguments>
+          None
+        </arguments>
+
+        <returns>
+          nil
+        </returns>
+
+        <description>
+          Displays the module focus stack, one module per line; the
+          top of the stack (the focus module) is displayed first.
+        </description>
+
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="get-focus-stack"
+                   heading="(get-focus-stack)">
+
+        <arguments>
+          None
+        </arguments>
+
+        <returns>
+          List
+        </returns>
+
+        <description>
+          Returns the module names on the focus stack as a
+          list. The top module on the stack is the first entry
+          in the list.
+        </description>
+
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="clear-focus-stack"
+                   heading="(clear-focus-stack)">
+
+        <arguments>
+          None
+        </arguments>
+
+        <returns>
+          nil
+        </returns>
+
+        <description>
+          Removes all modules from the focus stack.
+        </description>
+
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="engine" name="pop-focus"
+                   heading="(pop-focus)">
+
+        <arguments>
+          None
+        </arguments>
+
+        <returns>
+          The name of a module
+        </returns>
+
+        <description>
+          Removes the top module from the focus stack and returns its
+          name.
+        </description>
+
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="display" name="list-deftemplates"
+                   heading="(list-deftemplates [module-name | *])">
+
+        <arguments>
+          Optionally, a module name, or the symbol "*"</arguments>
+
+        <returns>
+          nil</returns>
+
+        <description>
+          With no arguments, prints a list of all <construct name="deftemplate"/>s in the
+          current module (not the focus module) to the 't'
+          router. With a module name for an argument, prints the names
+          of the templates in that module. With "*" as an argument,
+          prints the names of all templates.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="asc"
+                   heading="(asc &lt;string&gt;)">
+
+        <arguments>
+          Any string or symbol</arguments>
+
+        <returns>
+          Integer</returns>
+
+        <description>
+          Returns the Unicode value of the first character of the
+          argument, as an RU.INTEGER.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="java" name="synchronized"
+                   heading="(synchronized &lt;java-object&gt; &lt;action>*)">
+
+        <arguments>
+          Any Java object, followed by any number of expressions</arguments>
+
+        <returns>
+          (varies)</returns>
+
+        <description>
+          Executes the expressions inside a Java "synchronized" block
+          which locks the given object. Returns the value of the last
+          expression evaluated.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="dependents"
+                   heading="(dependents &lt;fact-id>)">
+
+        <arguments>
+          A Fact or fact-id</arguments>
+
+        <returns>
+          A list</returns>
+
+        <description>
+          Returns a list containing all the <tt>jess.Fact</tt> objects
+          that get logical support from the argument fact; if there
+          are none this function returns an empty list.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="facts" name="dependencies"
+                   heading="(dependencies &lt;fact-id>)">
+
+        <arguments>
+          A Fact</arguments>
+
+        <returns>
+          A list</returns>
+
+        <description>
+          Returns a list containing all the <apic class="jess.Token"/>
+          objects that give logical support from the argument fact; if
+          there are none this function returns an empty list. A
+          <tt>jess.Token</tt> object is a list of facts; they're the
+          same objects returned by <jessf
+          name="run-query"/>.
+        </description>
+      </functiondef>
+
+      <!-- *********************************************************** -->
+
+      <functiondef topic="strings" name="regexp"
+                   heading="(regexp &lt;regular expression> &lt;data>)">
+
+        <arguments>
+          A regular expression and a target, as symbols or strings</arguments>
+
+        <returns>
+          Boolean</returns>
+
+        <description>
+          Compiles the regular expression and tries to match it
+          against the entire target string, returning the Boolean result of the
+          match. Uses the <tt>java.util.regexp</tt> package.
+        </description>
+      </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="debugging" name="jess-type"
+            heading="(jess-type &lt;value>)">
+
+            <arguments>
+                Any value</arguments>
+
+            <returns>
+                Symbol</returns>
+
+            <description>
+                Returns a symbol denoting the Jess data type of the
+                argument.
+            </description>
+        </functiondef>
+
+        <functiondef topic="java" name="implement" heading="(implement &lt;interface&gt; [using] &lt;function&gt;)">
+            <arguments>
+                The name of an interface, the optional symbol "using", and a Jess function or lambda expression
+            </arguments>
+
+            <returns>
+                An object that implements the given interface
+            </returns>
+
+            <description>
+            Lets you implement any interface from Jess. Here's an example of creating a Runnable object
+            entirely from Jess and running it in a new Thread:
+                <jess>
+ <input>;; Function's arguments will be the name of the method called on proxy object
+;; (run, here ), followed by the individual arguments passed to called
+;; method (none here).
+(deffunction my-runnable ($?args)
+  (printout t "Hello, World" crlf))</input>
+<result>TRUE</result>
+<input>;; Make a Runnable whose run() method will call my-runnable
+(bind ?runnable (implement Runnable using my-runnable))</input>
+<input>;; Use the Runnable
+((new Thread ?runnable) start)</input>
+</jess>
+            </description>
+
+        </functiondef>
+
+        <functiondef topic="control" name="lambda" heading="(lambda (&lt;arguments&gt;) &lt;function call&gt;+)">
+            <arguments>
+                A list of arguments followed by any number of function calls
+            </arguments>
+
+            <returns>
+                An anonymous deffunction
+            </returns>
+
+            <description>
+            Lets you create an unnamed deffunction. This is useful in conjunction with the <jessf name="implement"/> function.
+            In this example, we create a Runnable and execute it in a Thread.
+<jess>
+ <input>((new Thread (implement Runnable using
+     (lambda ($?args)
+         (printout t "Hello, World" crlf))
+     )
+  ) start)</input>
+</jess>
+                <p>This looks a lot like doing the same thing with an
+                anonymous class in Java:</p>
+<shell>
+new Thread(new Runnable() {
+    public void run() {
+        System.out.println("Hello, World!");
+    }
+}.start();
+</shell>
+
+            </description>
+
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="control" name="map" heading="(map &lt;function> &lt;list>)">
+
+            <arguments>
+                A function and a list</arguments>
+
+            <returns>
+                A list</returns>
+
+            <description>
+                Calls the function on each item in the list; returns a list of all the results. The function can either
+                be the name of a Userfunction, or it can be a <jessf name="lambda"/> expression.
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="control" name="filter" heading="(filter &lt;predicate function> &lt;list>)">
+
+            <arguments>
+                A function and a list</arguments>
+
+            <returns>
+                A list</returns>
+
+            <description>
+                Calls the function on each item in the list; returns a list of all the results for which the
+                function does not return FALSE. The function can either
+                be the name of a Userfunction, or it can be a <jessf name="lambda"/> expression.
+            </description>
+        </functiondef>
+
+        <!-- *********************************************************** -->
+
+        <functiondef topic="lists" name="list" heading="(list &lt;value>*)">
+
+            <arguments>
+                Any number of values</arguments>
+
+            <returns>
+                A list</returns>
+
+            <description>
+                An alias for <jessf name="create$"/>.
+            </description>
+        </functiondef>
+
+    </functionlist>
+  </chapter>
+</doc>

@@ -5,6 +5,12 @@
 * export LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server
 
 
+* export JAVA_HOME=/usr/lib/jvm/java-8-oracle/
+* export PATH="$PATH:/usr/lib/jvm/java-8-oracle/bin:/home/aldeberan/bin:/home/aldebaran/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+* export LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server
+
+gcc Sample2.c -L/usr/lib/jvm/java-8-oracle/jre/lib/amd64/server -I/usr/lib/jvm/java-8-oracle/include/ -I/usr/lib/jvm/java-8-oracle/include/linux/ -L/usr/bin/java -ljvm -o SampleJVM
+
 
 //avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega328p -c -o led.o led.c
 //avr-gcc -mmcu=atmega328p led.o -o led
@@ -20,3 +26,9 @@
 //avr-gcc -mmcu=atmega328p write_avr.o -o write_avr
 //avr-objcopy -O ihex -R .eeprom write_avr write_avr.hex
 //sudo avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:write_avr.hex
+
+
+//avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega328p -c -o write_avr.o write_avr.c
+//avr-gcc -mmcu=atmega328p write_avr.o -o write_avr
+//avr-objcopy -O ihex -R .eeprom write_avr write_avr.hex
+//sudo avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:write_avr.hexs 
