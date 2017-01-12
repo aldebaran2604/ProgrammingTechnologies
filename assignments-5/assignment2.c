@@ -31,7 +31,15 @@ int main()
 	instanceRete = initContrcutor("jess/Rete", clsRete, jvm, env);
 	jclass cls = (*env)->GetObjectClass(env, instanceRete);
 	addEval("(reset)", cls, instanceRete, jvm, env);
-	addEval("(reset)", cls, instanceRete, jvm, env);
+	addEval("(defrule botulismo (colicos) (problema-respiratorio) (problema-habla) (vision-doble) (nauseas) (vomito) (debilidad) (paralisis) =>(printout t \"Usted tiene botulismo\" crlf))", cls, instanceRete, jvm, env);
+	addEval("(assert (colicos))", cls, instanceRete, jvm, env);
+	addEval("(assert (problema-respiratorio))", cls, instanceRete, jvm, env);
+	addEval("(assert (problema-habla))", cls, instanceRete, jvm, env);
+	addEval("(assert (vision-doble))", cls, instanceRete, jvm, env);
+	addEval("(assert (nauseas))", cls, instanceRete, jvm, env);
+	addEval("(assert (vomito))", cls, instanceRete, jvm, env);
+	addEval("(assert (debilidad))", cls, instanceRete, jvm, env);
+	addEval("(assert (paralisis))", cls, instanceRete, jvm, env);
 	addEval("(run)", cls, instanceRete, jvm, env);
 }
 
