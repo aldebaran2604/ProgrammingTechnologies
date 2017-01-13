@@ -1,25 +1,29 @@
+(store "enfermedad1" "")
+(store "enfermedad2" "")
+(store "enfermedad3" "")
+(store "enfermedad4" "")
 (defrule botulismo 
 (colicos) (problema-respiratorio) (problema-habla) (vision-doble) (nauseas) (vomito) (debilidad) (paralisis) 
 =>
-(store "enfermedad" "Usted tiene botulismo"))
+(store "enfermedad1" "Usted tiene botulismo"))
 ;(printout t "Usted tiene botulismo" crlf))
 
 (defrule colera 
 (diarrea) (vomito) (deshidratacion)
 =>
-(store "enfermedad" "Usted tiene Cólera"))
+(store "enfermedad2" "Usted tiene Cólera"))
 ;(printout t "Usted tiene Cólera" crlf))
 
 (defrule lepra 
 (insensibilidad-piel) (insensibilidad-dolor) (vomito) (deshidratacion)
 =>
-(store "enfermedad" "Usted tiene lepra"))
+(store "enfermedad3" "Usted tiene lepra"))
 ;(printout t "Usted tiene lepra" crlf))
 
 (defrule dengue 
 (fiebre) (dolor-articular) (dolor-muscular) (inflamacion-ganglios) (erupcion-piel)
 =>
-(store "enfermedad" "Usted tiene Dengue"))
+(store "enfermedad4" "Usted tiene Dengue"))
 ;(printout t "Usted tiene Dengue" crlf))
 
 /*

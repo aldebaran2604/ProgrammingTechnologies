@@ -29,13 +29,19 @@ class MainClass {
 
 	public static void main(String[] args) throws JessException {
         MainClass mainClass = new MainClass("diagnostico.clp");
+        String[] arrayEnfermedades = { "enfermedad1", "enfermedad2", "enfermedad3", "enfermedad4" };
         for(int cont=0 ; cont<args.length; cont++) {
             mainClass.addAssert(args[cont]);
         }
         int contEnfermedades = mainClass.runJess();
         if (contEnfermedades>0) {
-            System.out.println("Esta dando las últimas");
-            System.out.println("Tiene "+mainClass.getFetch("enfermedad"));
+            System.out.println("Esta dando las últimas tiene "+contEnfermedades+" enfermedad(es)");
+            for (String sEnfermedad: arrayEnfermedades) {
+            	String auxFetch = mainClass.getFetch(sEnfermedad);
+            	if (!auxFetch.equals("")) {
+            		System.out.println(auxFetch);
+            	}
+            }
         } else {
             System.out.println("Usted no tiene alguna enfermedad registrada puede que muera pronto");
         }
